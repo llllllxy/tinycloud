@@ -16,10 +16,10 @@ docker run -d -e MODE=standalone -e PREFER_HOST_MODE=hostname -e SPRING_DATASOUR
 ```
 
 参数说明：
-单节点模式 MODE=standalone
-数据库地址 MYSQL_SERVICE_HOST
-数据库用户名 MYSQL_SERVICE_USER
-数据库密码 MYSQL_SERVICE_PASSWORD
-需连接的数据库名称 MYSQL_SERVICE_DB_NAME
-端口映射 -p 8848:8848
-任意时候重启容器，开机就能自动启动容器（需设置docker为开机自启）–restart=always
+- 单节点模式 MODE=standalone
+- 数据库地址 MYSQL_SERVICE_HOST
+- 数据库用户名 MYSQL_SERVICE_USER
+- 数据库密码 MYSQL_SERVICE_PASSWORD
+- 需连接的数据库名称 MYSQL_SERVICE_DB_NAME
+- 端口映射 -p 8848:8848
+- 任意时候重启容器，开机就能自动启动容器（需设置docker为开机自启）–restart=always
