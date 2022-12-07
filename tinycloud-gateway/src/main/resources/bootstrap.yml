@@ -1,0 +1,58 @@
+# Tomcat
+server:
+  port: 8083
+
+# Spring
+spring:
+  application:
+    # 应用名称
+    name: tinycloud-gateway
+  profiles:
+    # 环境配置
+    active: dev
+  main:
+    web-application-type: reactive
+  cloud:
+    nacos:
+      discovery:
+        # 服务注册地址
+        server-addr: 10.110.34.94:38848
+        username: nacos
+        password: nacos
+        service: tinycloud-gateway
+      config:
+        # 配置中心地址
+        server-addr: 10.110.34.94:38848
+        # 配置文件格式
+        file-extension: yml
+        # 共享配置
+        shared-configs:
+          - application-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}
+        username: nacos
+        password: nacos
+    gateway:
+      # 全局超时限制
+      httpclient:
+        connect-timeout: 1000
+        response-timeout: 200
+      routes:
+        - id: auth-server
+          uri: http://10.110.34.64:18082/auth-server/
+          predicates:
+            - Path=/gateway/auth-server/**
+          filters:
+            - StripPrefix=1
+
+        - id: oss-server
+          uri: http://10.110.34.64:18094/oss-server/
+          predicates:
+            - Path=/gateway/oss-server/**
+          filters:
+            - StripPrefix=1
+
+
+# 配置日志级别，方别调试
+logging:
+  level:
+    org.liuxingyu.tinycloud: info
+    org.springframework: info
