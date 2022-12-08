@@ -1,7 +1,8 @@
 tinycloud微服务框架
 
-tinycloud-gateway（网关层鉴权，还是分布到各个组件呢，分布到各个组件呢的话则需要tinycloud-auth-client组件）
-tinycloud-common      公共组件jar包
+tinycloud-gateway     服务，网关（网关层鉴权，还是分布到各个组件呢，分布到各个组件呢的话则需要tinycloud-auth-client组件）
+tinycloud-common      公共组件jar包（公共方法等）
+tinycloud-api         公共组件jar包（openfeign调用声明接口类）
 tinycloud-user        服务，用户中心
 tinycloud-ability     服务，能力中心
 tinycloud-message     服务，消息中心
