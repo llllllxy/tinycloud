@@ -65,6 +65,14 @@ spring:
           filters:
             - StripPrefix=1
 
+        - id: tinycloud-message
+          uri: lb://tinycloud-message
+          predicates:
+            - Path=/gateway/tinycloud-message/**
+          filters:
+            - StripPrefix=1
+
+
 # 配置日志级别，方别调试
 logging:
   level:
