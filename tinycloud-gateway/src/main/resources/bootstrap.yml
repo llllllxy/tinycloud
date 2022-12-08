@@ -50,6 +50,19 @@ spring:
           filters:
             - StripPrefix=1
 
+        - id: tinycloud-user
+          uri: lb://tinycloud-user
+          predicates:
+            - Path=/gateway/tinycloud-user/**
+          filters:
+            - StripPrefix=1
+
+        - id: tinycloud-ability
+          uri: lb://tinycloud-ability
+          predicates:
+            - Path=/gateway/tinycloud-ability/**
+          filters:
+            - StripPrefix=1
 
 # 配置日志级别，方别调试
 logging:

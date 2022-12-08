@@ -1,0 +1,48 @@
+# 项目相关配置
+tinycloud:
+  # 名称
+  name: tinycloud-ability
+  # 版本
+  version: 1.0.0
+
+# Tomcat
+server:
+  port: 8085
+  servlet:
+    context-path: /tinycloud-ability
+
+# Spring
+spring:
+  application:
+    # 应用名称
+    name: tinycloud-ability
+  profiles:
+    # 环境配置
+    active: dev
+  cloud:
+    nacos:
+      discovery:
+        # 服务注册地址
+        server-addr: 10.110.34.94:38848
+        username: nacos
+        password: nacos
+        service: tinycloud-ability
+      config:
+        # 配置中心地址
+        server-addr: 10.110.34.94:38848
+        # 配置文件格式
+        file-extension: yml
+        # 共享配置
+        shared-configs:
+          - data-id: ${spring.application.name}-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}
+            refresh: true
+        username: nacos
+        password: nacos
+
+# 配置日志级别，方别调试
+logging:
+  level:
+    org.liuxingyu.tinycloud: info
+    org.springframework: info
+
+

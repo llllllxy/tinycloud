@@ -1,4 +1,4 @@
-package org.liuxingyu.tinycloud;
+package org.liuxingyu.tinycloud.user;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,24 +13,24 @@ import java.net.UnknownHostException;
 
 /**
  * @author liuxingyu01
- * @date 2022-12-07 9:38
+ * @date 2022-12-08 10:33
  * @description
  **/
 @EnableDiscoveryClient // nacos注册中心配置
 @SpringBootApplication
-public class GatewayApplication {
-    final static Logger logger = LoggerFactory.getLogger(GatewayApplication.class);
+public class UserApplication {
+    final static Logger logger = LoggerFactory.getLogger(UserApplication.class);
 
     public static void main(String[] args) throws UnknownHostException {
 
-        ConfigurableApplicationContext application = SpringApplication.run(GatewayApplication.class, args);
+        ConfigurableApplicationContext application = SpringApplication.run(UserApplication.class, args);
         Environment env = application.getEnvironment();
         String ip = InetAddress.getLocalHost().getHostAddress();
         String port = env.getProperty("server.port");
         String path = env.getProperty("server.servlet.context-path");
 
         logger.info("\n----------------------------------------------------------\n\t" +
-                "tinycloud-gateway 启动成功！\n\t" +
+                "tinycloud-user 启动成功！\n\t" +
                 "┌─┐┬ ┬┌─┐┌─┐┌─┐┌─┐┌─┐  ┌─┐┌┬┐┌─┐┬─┐┌┬┐┌─┐┌┬┐   ┬\n\t" +
                 "└─┐│ ││  │  ├┤ └─┐└─┐  └─┐ │ ├─┤├┬┘ │ ├┤  ││   │\n\t" +
                 "└─┘└─┘└─┘└─┘└─┘└─┘└─┘  └─┘ ┴ ┴ ┴┴└─ ┴ └─┘─┴┘   o\n\t" +

@@ -1,4 +1,4 @@
-package org.liuxingyu.tinycloud.config.swagger;
+package org.liuxingyu.tinycloud.gateway.config.swagger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.config.GatewayProperties;
