@@ -25,9 +25,10 @@ spring:
         server-addr: 10.110.34.94:38848
         # 配置文件格式
         file-extension: yml
-        # 共享配置
+        # 共享配置(自动刷新)
         shared-configs:
-          - application-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}
+          - data-id: ${spring.application.name}-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}
+            refresh: true
         username: nacos
         password: nacos
     gateway:
