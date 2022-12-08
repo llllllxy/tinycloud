@@ -16,6 +16,8 @@
         <module>tinycloud-common</module>
         <module>tinycloud-user</module>
         <module>tinycloud-ability</module>
+        <module>tinycloud-api</module>
+        <module>tinycloud-message</module>
     </modules>
 
     <properties>
