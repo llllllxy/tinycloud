@@ -37,8 +37,8 @@ public class MessageApplication {
                 "└─┘└─┘└─┘└─┘└─┘└─┘└─┘  └─┘ ┴ ┴ ┴┴└─ ┴ └─┘─┴┘   o\n\t" +
                 "-------------------------------------------------------------------------\n\t" +
                 "Access URLs:\n\t" +
-                "Local: \t\thttp://localhost:" + port + "/\n\t" +
-                "External: \thttp://" + ip + ":" + port + "/\n" +
+                "Local: \t\thttp://localhost:" + port + path + "/\n\t" +
+                "External: \thttp://" + ip + ":" + port + path + "/\n" +
                 "-------------------------------------------------------------------------");
     }
 }
