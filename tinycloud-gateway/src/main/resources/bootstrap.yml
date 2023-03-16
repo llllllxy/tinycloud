@@ -16,18 +16,17 @@ spring:
     nacos:
       discovery:
         # 服务注册地址
-        server-addr: 10.110.34.94:38848
+        server-addr: 192.168.3.189:38848
         username: nacos
         password: nacos
-        service: tinycloud-gateway
       config:
         # 配置中心地址
-        server-addr: 10.110.34.94:38848
+        server-addr: 192.168.3.189:38848
         # 配置文件格式
         file-extension: yml
         # 共享配置(自动刷新)
         shared-configs:
-          - data-id: ${spring.application.name}-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}
+          - data-id: tinycloud-gateway-common-dev.yml
             refresh: true
         username: nacos
         password: nacos
