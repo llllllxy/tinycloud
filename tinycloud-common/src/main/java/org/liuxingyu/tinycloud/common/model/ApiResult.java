@@ -53,28 +53,21 @@ public class ApiResult<T> implements Serializable {
         this.msg = msg;
     }
 
-    public String getTraceId() {
-        return traceId;
-    }
-
-    public void setTraceId(String traceId) {
-        this.traceId = traceId;
-    }
-
-    public long getTime() {
-        return time;
-    }
-
-    public void setTime(long time) {
-        this.time = time;
-    }
-
+    /**
+     * 空构造方法
+     */
     public ApiResult() {
         this.traceId = MDC.get("traceId");
         this.time = System.currentTimeMillis();
     }
 
-
+    /**
+     * 带参构造方法
+     *
+     * @param code 编码
+     * @param data 自定义data
+     * @param msg  自定义消息
+     */
     public ApiResult(Integer code, T data, String msg) {
         this.code = code;
         this.data = data;
@@ -85,6 +78,7 @@ public class ApiResult<T> implements Serializable {
 
     /**
      * 返回成功
+     *
      * @param <T> 泛型
      * @return ApiResult<T>
      */
@@ -94,27 +88,30 @@ public class ApiResult<T> implements Serializable {
 
     /**
      * 返回成功
+     *
      * @param data 自定义data
-     * @param <T> 泛型
+     * @param <T>  泛型
      * @return ApiResult<T>
      */
     public static <T> ApiResult<T> success(T data) {
-        return success(data, ResultCode.SUCCESS.getDesc());
+        return success(ResultCode.SUCCESS.getDesc(), data);
     }
 
     /**
      * 返回成功
+     *
      * @param data 自定义data
-     * @param msg 自定义消息
-     * @param <T> 泛型
+     * @param msg  自定义消息
+     * @param <T>  泛型
      * @return ApiResult<T>
      */
-    public static <T> ApiResult<T> success(T data, String msg) {
+    public static <T> ApiResult<T> success(String msg, T data) {
         return new ApiResult<>(ResultCode.SUCCESS.getCode(), data, msg);
     }
 
     /**
      * 返回失败
+     *
      * @param msg 自定义消息
      * @param <T> 泛型
      * @return ApiResult<T>
@@ -125,9 +122,10 @@ public class ApiResult<T> implements Serializable {
 
     /**
      * 返回失败
+     *
      * @param code 自定义错误码
-     * @param msg 自定义消息
-     * @param <T> 泛型
+     * @param msg  自定义消息
+     * @param <T>  泛型
      * @return ApiResult<T>
      */
     public static <T> ApiResult<T> fail(Integer code, String msg) {
@@ -135,11 +133,12 @@ public class ApiResult<T> implements Serializable {
     }
 
     /**
-     * 返回失败
+     * 返回失败（标记系统）
+     *
      * @param systemCode 自定义系统码
-     * @param code 自定义错误码
-     * @param msg 自定义消息
-     * @param <T> 泛型
+     * @param code       自定义错误码
+     * @param msg        自定义消息
+     * @param <T>        泛型
      * @return ApiResult<T>
      */
     public static <T> ApiResult<T> fail(SystemCode systemCode, Integer code, String msg) {
@@ -147,9 +146,10 @@ public class ApiResult<T> implements Serializable {
     }
 
     /**
-     * 返回失败
+     * 返回失败（标记系统）
+     *
      * @param systemCode 自定义系统码
-     * @param error 自定义错误码
+     * @param error      自定义错误码
      * @return ApiResult<T>
      */
     public static ApiResult<?> fail(SystemCode systemCode, ResultCode error) {
@@ -158,10 +158,11 @@ public class ApiResult<T> implements Serializable {
 
     /**
      * 返回失败
+     *
      * @param systemCode 自定义系统码
-     * @param error 自定义错误码
-     * @param data 自定义消息
-     * @param <T> 泛型
+     * @param error      自定义错误码
+     * @param data       自定义消息
+     * @param <T>        泛型
      * @return ApiResult<T>
      */
     public static <T> ApiResult<T> fail(SystemCode systemCode, ResultCode error, T data) {

@@ -2,12 +2,13 @@ package org.liuxingyu.tinycloud.common.consts;
 
 
 public enum SystemCode {
-    X1_USER_CENTER(10000, "用户中心"),
-    X1_ABILITY_CENTER(20000, "能力中心"),
-    X1_MESSAGE_CENTER(30000, "消息中心"),
-    X1_JOB_CENTER(40000, "调度中心"),
-    X1_GATEWAY(50000, "网关服务"),
-    X1_SYSTEM(90000, "系统管理服务"),
+    USER_CENTER(1000, "用户中心"),
+    AUTH_CENTER(2000, "会话中心"),
+    ABILITY_CENTER(3000, "能力中心"),
+    MESSAGE_CENTER(4000, "消息中心"),
+    JOB_CENTER(5000, "调度中心"),
+    GATEWAY(5000, "网关服务"),
+    SYSTEM(9000, "系统管理服务"),
     ;
 
     private Integer code;
