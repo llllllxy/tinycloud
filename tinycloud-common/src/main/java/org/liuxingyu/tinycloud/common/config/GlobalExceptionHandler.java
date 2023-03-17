@@ -58,17 +58,18 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ApiResult<?> exception(Throwable throwable) {
-        log.error("系统处理异常!", throwable);
+        log.error("系统处理异常：", throwable);
         // 参数格式转换异常
         if (throwable instanceof IllegalArgumentException
                 || throwable instanceof HttpMessageConversionException
                 || throwable instanceof MethodArgumentTypeMismatchException) {
             return buildResponseEntity(ResultCode.PARAM_ERROR.getCode(), ResultCode.PARAM_ERROR.getDesc());
         }
+        // 请求方式method不支持异常
         if (throwable instanceof HttpRequestMethodNotSupportedException) {
             return buildResponseEntity(ResultCode.RESOURCE_METHOD_NOT_SUPPORT.getCode(), ResultCode.RESOURCE_METHOD_NOT_SUPPORT.getDesc());
         }
-        // 业务异常
+        // 自定义业务异常
         if (throwable instanceof BusinessException) {
             return buildResponseEntity(((BusinessException) throwable).getCode(), throwable.getMessage());
         }

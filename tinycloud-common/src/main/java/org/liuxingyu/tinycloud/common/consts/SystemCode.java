@@ -1,5 +1,13 @@
 package org.liuxingyu.tinycloud.common.consts;
 
+/**
+ * <p>
+ * 系统编码常量
+ * </p>
+ *
+ * @author liuxingyu01
+ * @since 2023/1/4 14:49
+ **/
 
 public enum SystemCode {
     USER_CENTER(1000, "用户中心"),
