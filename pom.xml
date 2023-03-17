@@ -18,6 +18,7 @@
         <module>tinycloud-ability</module>
         <module>tinycloud-api</module>
         <module>tinycloud-message</module>
+        <module>tinycloud-bean</module>
     </modules>
 
     <properties>
@@ -115,21 +116,6 @@
 
         </dependencies>
     </dependencyManagement>
-
-
-    <build>
-        <finalName>tinycloud</finalName>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>2.3.6.RELEASE</version>
-                <configuration>
-                    <includeSystemScope>true</includeSystemScope>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 
 
     <repositories>
