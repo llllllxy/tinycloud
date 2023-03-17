@@ -13,7 +13,12 @@ public final class GlobalConstant {
     /**
      * 系统包名前缀(用于扫描包的配置)
      */
-    public static final String BASE_PACKAGE_PREFIX = "com.liuxingyu.tinycloud";
+    public static final String BASE_PACKAGE_PREFIX = "org.liuxingyu.tinycloud";
+
+    /**
+     * Feign包名前缀(用于扫描Feign的配置)
+     */
+    public static final String FEIGN_PACKAGE_PREFIX = "org.liuxingyu.tinycloud.api";
 
     /**
      * 前端请求头的的请求客户端

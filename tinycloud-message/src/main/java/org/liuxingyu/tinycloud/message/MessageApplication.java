@@ -12,14 +12,17 @@ import org.springframework.core.env.Environment;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
+import static org.liuxingyu.tinycloud.common.consts.GlobalConstant.BASE_PACKAGE_PREFIX;
+import static org.liuxingyu.tinycloud.common.consts.GlobalConstant.FEIGN_PACKAGE_PREFIX;
+
 /**
  * @author liuxingyu01
  * @date 2022-12-08 15:03
  * @description
  **/
 @EnableDiscoveryClient // nacos注册中心配置
-@EnableFeignClients(basePackages = {"org.liuxingyu.tinycloud.api"})
-@SpringBootApplication
+@EnableFeignClients(basePackages = {FEIGN_PACKAGE_PREFIX})
+@SpringBootApplication(scanBasePackages = {BASE_PACKAGE_PREFIX})
 public class MessageApplication {
     final static Logger logger = LoggerFactory.getLogger(MessageApplication.class);
 
