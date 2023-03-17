@@ -14,7 +14,7 @@ public enum ResultCode {
     PARAM_ERROR(400, "参数校验失败"),
     UNAUTHORIZED(401, "会话不存在或已失效"),
     NOT_EXIST(402, "不存在"),
-    FORBIDDEN(403, "访问受限，无权限"),
+    FORBIDDEN(403, "资源访问受限，无权限"),
     RESOURCE_NOT_FOUND(404, "资源未找到"),
     RESOURCE_METHOD_NOT_SUPPORT(405, "请求方法不支持"),
     RESOURCE_CONFLICT(409, "资源冲突"),
@@ -28,6 +28,7 @@ public enum ResultCode {
      * 错误码
      */
     private Integer code;
+
     /**
      * 错误描述
      */
