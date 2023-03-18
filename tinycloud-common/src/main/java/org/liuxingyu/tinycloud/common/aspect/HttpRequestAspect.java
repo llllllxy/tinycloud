@@ -1,6 +1,5 @@
 package org.liuxingyu.tinycloud.common.aspect;
 
-import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.liuxingyu.tinycloud.common.utils.JsonUtils;
@@ -34,43 +33,6 @@ public class HttpRequestAspect {
     }
 
     /**
-     * 在切点之前织入
-     *
-     * @param joinPoint
-     */
-    @Before("reqOpenAPILog()")
-    public void doBefore(JoinPoint joinPoint) {
-        // 开始打印请求日志
-        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        HttpServletRequest request = attributes.getRequest();
-        Object[] args = joinPoint.getArgs();
-        Object param;
-        if (args != null && args.length == 1) {
-            param = args[0];
-        } else {
-            param = args;
-        }
-        // 打印请求 url
-        log.info("Request URL    : {}", request.getRequestURL().toString());
-        // 打印 Http method
-        log.info("HTTP Method    : {}", request.getMethod());
-        // 打印调用 controller 的全路径以及执行方法
-        log.info("Class Method   : {}.{}", joinPoint.getSignature().getDeclaringTypeName(), joinPoint.getSignature().getName());
-        // 打印请求的 IP
-        log.info("Request IP     : {}", request.getRemoteAddr());
-        // 打印请求入参（这是个危险操作，因为如果参数过大的话会导致日志过大）
-        log.info("Request Args   : {}", JsonUtils.toJsonString(param));
-    }
-
-    /**
-     * 在切点之后织入
-     */
-    @After("reqOpenAPILog()")
-    public void doAfter() {
-        // TODO:doSth().
-    }
-
-    /**
      * 环绕
      *
      * @param proceedingJoinPoint
@@ -81,9 +43,32 @@ public class HttpRequestAspect {
     public Object doAround(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         log.info("========================================== Start ==========================================");
         long startTime = System.currentTimeMillis();
+
+        // 开始打印请求日志
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        HttpServletRequest request = attributes.getRequest();
+        // 打印请求 url
+        log.info("Request URL    : {}", request.getRequestURL().toString());
+        // 打印 Http method
+        log.info("HTTP Method    : {}", request.getMethod());
+        // 打印调用 controller 的全路径以及执行方法
+        log.info("Class Method   : {}.{}", proceedingJoinPoint.getSignature().getDeclaringTypeName(), proceedingJoinPoint.getSignature().getName());
+        // 打印请求的 IP
+        log.info("Request IP     : {}", request.getRemoteAddr());
+
+        // 打印请求入参（这是个危险操作，因为如果参数过大的话会导致日志过大） -----> 暂时去掉参数的打印
+        // Object[] args = proceedingJoinPoint.getArgs();
+        // Object param;
+        // if (args != null && args.length == 1) {
+        //    param = args[0];
+        // } else {
+        //     param = args;
+        // }
+        // log.info("Request Args   : {}", JsonUtils.toJsonString(param));
+
         Object result = proceedingJoinPoint.proceed();
-        // 打印出参
-        log.info("Response Args  : {}", JsonUtils.toJsonString(result));
+        // 打印执行结果
+        log.info("Response Result  : {}", JsonUtils.toJsonString(result));
         // 执行耗时
         log.info("Time-Consuming : {} ms", System.currentTimeMillis() - startTime);
         log.info("=========================================== End ===========================================");
