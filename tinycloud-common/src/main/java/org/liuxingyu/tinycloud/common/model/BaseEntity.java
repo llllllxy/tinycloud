@@ -1,5 +1,8 @@
 package org.liuxingyu.tinycloud.common.model;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -7,7 +10,7 @@ import java.io.Serializable;
 
 /**
  * <p>
- * Entity基类
+ * Entity基类（每张表都有的通用字段在此定义）
  * </p>
  *
  * @author liuxingyu01
@@ -19,11 +22,13 @@ public class BaseEntity implements Serializable {
     /**
      * 自增主键id, 无业务含义
      */
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     /**
      * 创建时间
      */
+    @TableField(value = "created_at")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private String createdAt;
@@ -31,6 +36,7 @@ public class BaseEntity implements Serializable {
     /**
      * 更新时间
      */
+    @TableField(value = "updated_at")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private String updatedAt;
@@ -38,11 +44,13 @@ public class BaseEntity implements Serializable {
     /**
      * 创建人
      */
+    @TableField(value = "created_by")
     private String createdBy;
 
     /**
      * 修改人
      */
+    @TableField(value = "updated_by")
     private String updatedBy;
 
     public Long getId() {
