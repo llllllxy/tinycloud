@@ -9,7 +9,7 @@ tinycloud:
 server:
   port: 8086
   servlet:
-    context-path: /tinycloud-message
+    context-path: /message-server
 
 # Spring
 spring:

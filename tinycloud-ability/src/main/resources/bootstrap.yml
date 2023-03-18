@@ -9,7 +9,7 @@ tinycloud:
 server:
   port: 8085
   servlet:
-    context-path: /tinycloud-ability
+    context-path: /ability-server
 
 # Spring
 spring:
