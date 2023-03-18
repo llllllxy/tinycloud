@@ -51,9 +51,9 @@ public class MybatisPlusGenerator {
                 .strategyConfig(builder -> {
                     builder.addInclude(schemas)                                          // 设置需要生成的表名
                             .addTablePrefix("t_csp_")                                       // 表前缀过滤
-                            .entityBuilder().idType(IdType.ASSIGN_ID)                  //配置雪花id类型
+                            .entityBuilder().idType(IdType.AUTO)                        //配置为数据库自增id类型
 //                            .versionColumnName("version")                               // 乐观锁字段名(数据库)
-//                            .logicDeleteColumnName("isDeleted")                         // 逻辑删除字段名(数据库)
+//                            .logicDeleteColumnName("delFlag")                         // 逻辑删除字段名(数据库)
 //                            .enableLombok()                                             // lombok生效
                             .enableTableFieldAnnotation()                               // 所有实体类加注解
                             .serviceBuilder()                                           // 切换至Service层设置
