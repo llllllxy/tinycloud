@@ -47,6 +47,14 @@ spring:
             group: DEFAULT_GROUP
             refresh: true
 
+# Feign调用配置
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 5000
+
 # 配置日志级别，方别调试
 logging:
   level:
