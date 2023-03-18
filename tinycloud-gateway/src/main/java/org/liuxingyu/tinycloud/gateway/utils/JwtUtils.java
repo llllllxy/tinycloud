@@ -61,10 +61,9 @@ public class JwtUtils {
 
 
     public static void main(String[] args) {
-
         // 创建token
         Map<String, Object> claims = new HashMap<>();
-        claims.put("uuid", UUID.randomUUID().toString().replace("-", ""));
+        claims.put("auth_token", UUID.randomUUID().toString().replace("-", ""));
         String token = createJwt(claims);
 
         System.out.println("token = " + token);
