@@ -99,5 +99,5 @@ logging:
 
 system:
   skip-url:
-    - '/yyy/yy'
-    - '/xxx/xx'
+    - '/gateway/user-server/yyy/yy'
+    - '/gateway/user-server/xxx/xx'
