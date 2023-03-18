@@ -58,7 +58,7 @@ public class HttpRequestAspect {
         log.info("Class Method   : {}.{}", joinPoint.getSignature().getDeclaringTypeName(), joinPoint.getSignature().getName());
         // 打印请求的 IP
         log.info("Request IP     : {}", request.getRemoteAddr());
-        // 打印请求入参
+        // 打印请求入参（这是个危险操作，因为如果参数过大的话会导致日志过大）
         log.info("Request Args   : {}", JsonUtils.toJsonString(param));
     }
 
