@@ -32,7 +32,7 @@ spring:
         group: DEFAULT_GROUP
       config:
         # 配置中心地址
-        server-addr: 192.168.3.189:38848
+        server-addr: ${spring.cloud.nacos.discovery.server-addr}
         username: nacos
         password: nacos
         # 命名空间(注意是id)

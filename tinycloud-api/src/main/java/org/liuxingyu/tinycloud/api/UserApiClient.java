@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @date 2022-12-08 13:49
  * @description Feign接口声明
  **/
-@FeignClient(value = ApiServerConstants.USER_SERVER, contextId = "remoteUserService", path = "/tinycloud-user")
+@FeignClient(value = ApiServerConstants.USER_SERVER, contextId = "remoteUserService", path = "/user-server")
 public interface UserApiClient {
 
     /**
