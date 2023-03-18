@@ -4,6 +4,8 @@ tinycloud:
   name: tinycloud-user
   # 版本
   version: 1.0.0
+  # 是否开启swagger
+  swagger-enable: true
 
 # Tomcat
 server:
