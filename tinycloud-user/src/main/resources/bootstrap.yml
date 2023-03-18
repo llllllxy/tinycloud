@@ -11,7 +11,7 @@ tinycloud:
 server:
   port: 8084
   servlet:
-    context-path: /tinycloud-user
+    context-path: /user-server
 
 # Spring
 spring:
