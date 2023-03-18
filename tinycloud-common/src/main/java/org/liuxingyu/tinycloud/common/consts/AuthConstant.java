@@ -23,28 +23,28 @@ public class AuthConstant {
     /**
      * 图片验证码 redis-key
      */
-    public static final String AUTH_CAPTCHA_CODE_REDIS_KEY = "coolcars-mms:captchacodes";
+    public static final String AUTH_CAPTCHA_CODE_REDIS_KEY = "tinycloud:captchacodes";
 
     /**
      * 缓存用户会话redis的key
      */
-    public final static String AUTH_TOKEN_CACHE = "coolcars:cache:token";
+    public final static String AUTH_TOKEN_CACHE = "tinycloud:cache:token";
 
     // 登录密码的盐
     public final static String AUTH_SALT = "ymp8R3Vg7Kv5$y5fM3*xl&ins7SZcTEY";
 
     // 缓存同一账号登录会话数
-    public final static String AUTH_USER_SESSION_NUMS_REDIS_KEY = "coolcars:user-session-nums";
+    public final static String AUTH_USER_SESSION_NUMS_REDIS_KEY = "tinycloud:user-session-nums";
 
     // 缓存尝试登录次数
-    public final static String AUTH_LOGIN_ATTEMPT_TIMES_REDIS_KEY = "coolcars:login-attempt-times";
+    public final static String AUTH_LOGIN_ATTEMPT_TIMES_REDIS_KEY = "tinycloud:login-attempt-times";
 
     // 缓存用户信息
-    public final static String AUTH_USERINFO_CACHE_REDIS_KEY = "coolcars:cache:userinfo";
+    public final static String AUTH_USERINFO_CACHE_REDIS_KEY = "tinycloud:cache:userinfo";
 
     // 缓存权限信息
-    public final static String AUTH_PERMISSIONS_CACHE_REDIS_KEY = "coolcars:cache:permissions";
+    public final static String AUTH_PERMISSIONS_CACHE_REDIS_KEY = "tinycloud:cache:permissions";
 
     // 缓存角色信息
-    public final static String AUTH_ROLES_CACHE_REDIS_KEY = "coolcars:cache:roles";
+    public final static String AUTH_ROLES_CACHE_REDIS_KEY = "tinycloud:cache:roles";
 }
