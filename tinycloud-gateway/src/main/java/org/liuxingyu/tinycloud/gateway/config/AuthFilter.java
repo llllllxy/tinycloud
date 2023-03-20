@@ -1,6 +1,5 @@
 package org.liuxingyu.tinycloud.gateway.config;
 
-
 import com.alibaba.nacos.common.utils.StringUtils;
 import io.jsonwebtoken.Claims;
 import org.liuxingyu.tinycloud.gateway.utils.JsonUtils;
@@ -25,11 +24,12 @@ import reactor.core.publisher.Mono;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 
 /**
- * 鉴权过滤器
+ * 全局鉴权过滤器
  *
  * @author liuxingyu01
  * @since 2021-4-25 16:29:08
@@ -51,22 +51,22 @@ public class AuthFilter implements GlobalFilter, Ordered {
     /**
      * 缓存用户会话redis的key
      */
-    public final static String AUTH_TOKEN_CACHE = "tinycloud:cache:token";
+    private final static String AUTH_TOKEN_CACHE = "tinycloud:cache:token";
 
     /**
      * 刷新redis里缓存的时间阈值
      */
-    private static final Long MILLIS_MINUTE_TEN = 20 * 60 * 1000L;
+    private static final long MILLIS_MINUTE_TEN = 20 * 60 * 1000L;
 
     /**
      * 毫秒
      */
-    protected static final long MILLIS_SECOND = 1000;
+    private static final long MILLIS_SECOND = 1000;
 
     /**
      * 用户会话时长，默认1800秒
      */
-    protected static final long AUTH_TIMEOUT = 1800;
+    private static final long AUTH_TIMEOUT = 1800;
 
     @Autowired
     private AuthUrlProperties authUrlProperties;
@@ -80,10 +80,9 @@ public class AuthFilter implements GlobalFilter, Ordered {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         String path = exchange.getRequest().getURI().getPath();
-
         // 不需要登录校验的话直接跳过后面的步骤
         if (isSkip(path)) {
-            // 设置用户信息到请求头，传递到下游微服务
+            // 设置用户信息到请求头，传递到下游微服务，下游服务需要判断GATEWAY_REQUEST_URL是否为空来确定此次访问是不是从网关过来的，不是网关过来的禁止访问
             ServerHttpRequest mutableReq = exchange.getRequest().mutate()
                     .header("USER_ID", "")
                     .header("USERNAME", "")
@@ -103,7 +102,7 @@ public class AuthFilter implements GlobalFilter, Ordered {
         String token = StringUtils.isBlank(headerToken) ? paramToken : headerToken;
 
         // 第2步：校验token的格式是否正确
-        if (token.startsWith(TOKEN_PREFIX)) {
+        if (Objects.nonNull(token) && token.startsWith(TOKEN_PREFIX)) {
             token = token.replace(TOKEN_PREFIX, "");
         } else { // token不是以TOKEN_PREFIX开头的，不合格
             return unAuth(resp);
@@ -116,17 +115,15 @@ public class AuthFilter implements GlobalFilter, Ordered {
         } catch (Exception e) {
             return unAuth(resp);
         }
-        // 从jwt的Payload里获取redis-key，这相当于是真正的会话token，里面存着用户信息，包括userId，username等
+        // 从jwt的Payload里获取auth_token，这是会话的redis-key，它在redis里面存着用户信息，包括userId，username等
         String auth_token = (String) claims.get("auth_token");
         // 第4步：校验auth_token在redis里是否存在
         String authString = stringRedisTemplate.opsForValue().get(AUTH_TOKEN_CACHE + ":" + auth_token);
         if (StringUtils.isBlank(authString)) {
             return unAuth(resp);
         }
-        Map<String, Object> authMap;
-        try {
-            authMap = (Map<String, Object>) JsonUtils.parseMap(authString);
-        } catch (Exception e) {
+        Map<String, Object> authMap = (Map<String, Object>) JsonUtils.parseMap(authString);
+        if (Objects.isNull(authMap) || authMap.isEmpty()) {
             return unAuth(resp);
         }
         // 第5步：会话校验合格，取出会话信息，并向下游服务传递（后续的权限和角色值可能也会放在authMap里，同时校验）
@@ -137,13 +134,13 @@ public class AuthFilter implements GlobalFilter, Ordered {
 
         // 验证token有效期，相差不足10分钟时，自动刷新缓存，这样设计可以减少对redis的访问
         if (expireTime - currentTime <= MILLIS_MINUTE_TEN) {
-            authMap.put("loginTime", System.currentTimeMillis());
-            authMap.put("expireTime", System.currentTimeMillis() + AUTH_TIMEOUT * MILLIS_SECOND);
-            stringRedisTemplate.opsForValue().set(AUTH_TOKEN_CACHE + ":" + auth_token,
-                    JsonUtils.toJsonString(authMap), AUTH_TIMEOUT, TimeUnit.SECONDS);
+            authMap.put("loginTime", currentTime);
+            authMap.put("expireTime", currentTime + AUTH_TIMEOUT * MILLIS_SECOND);
+            // 重新放入redis，并且刷新缓存时间
+            stringRedisTemplate.opsForValue().set(AUTH_TOKEN_CACHE + ":" + auth_token, JsonUtils.toJsonString(authMap), AUTH_TIMEOUT, TimeUnit.SECONDS);
         }
 
-        // 设置用户信息到请求头，传递到下游微服务
+        // 设置用户信息到请求头，传递到下游微服务，下游服务需要判断GATEWAY_REQUEST_URL是否为空来确定此次访问是不是从网关过来的，不是网关过来的禁止访问
         ServerHttpRequest mutableReq = exchange.getRequest().mutate()
                 .header("USER_ID", userId)
                 .header("USERNAME", username)
@@ -157,20 +154,20 @@ public class AuthFilter implements GlobalFilter, Ordered {
 
     /**
      * 会话校验失败统一处理
+     *
      * @param resp ServerHttpResponse
      * @return Mono
      */
     private Mono<Void> unAuth(ServerHttpResponse resp) {
         resp.setStatusCode(HttpStatus.OK);
         resp.getHeaders().add("Content-Type", "application/json;charset=UTF-8");
-        String result = "";
         Map<String, Object> map = new HashMap<>(16);
         map.put("code", HttpStatus.UNAUTHORIZED.value());// 编码401
         map.put("msg", "会话已失效或不存在！");
         map.put("data", null);
         map.put("time", System.currentTimeMillis());
         // 转成json返回
-        result = JsonUtils.toJsonString(map);
+        String result = JsonUtils.toJsonString(map);
         DataBuffer buffer = resp.bufferFactory().wrap(result.getBytes(StandardCharsets.UTF_8));
         return resp.writeWith(Flux.just(buffer));
     }

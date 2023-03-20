@@ -29,7 +29,7 @@ public class FeignRequestInterceptor implements RequestInterceptor {
      */
     @Override
     public void apply(RequestTemplate requestTemplate) {
-        // 1. obtain request
+        // 1. 获取ServletRequestAttributes对象
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         // 2. 获取不到ServletRequestAttributes的问题（使拦截器直接失效）
         if (Objects.isNull(attributes)) {
@@ -38,7 +38,7 @@ public class FeignRequestInterceptor implements RequestInterceptor {
         }
         HttpServletRequest request = attributes.getRequest();
 
-        // 3. obtain request headers，and put it into openFeign RequestTemplate
+        // 3. 获取请求头，无差别的全部放入到 openFeign 请求模板
         Enumeration<String> headerNames = request.getHeaderNames();
         if (Objects.nonNull(headerNames)) {
             while (headerNames.hasMoreElements()) {
