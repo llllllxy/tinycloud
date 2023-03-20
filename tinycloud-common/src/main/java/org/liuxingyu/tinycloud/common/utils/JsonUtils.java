@@ -5,7 +5,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -52,7 +51,7 @@ public class JsonUtils {
             jsonString = getObjectMapper().writeValueAsString(obj);
         } catch (Exception e) {
             if (log.isErrorEnabled()) {
-                log.error("JsonTool -- toJsonString -- Exception=", e);
+                log.error("JsonUtils -- toJsonString -- Exception=", e);
             }
         }
         return jsonString;
@@ -66,15 +65,17 @@ public class JsonUtils {
      * @return Map returnMap
      */
     public static Map parseMap(String JsonString) {
-        Map returnMap = new HashMap();
-        try {
-            returnMap = getObjectMapper().readValue(JsonString, Map.class);
-        } catch (Exception e) {
-            if (log.isErrorEnabled()) {
-                log.error("JsonTool -- getMapFromJsonString -- Exception=", e);
+        if (JsonString != null && !JsonString.trim().isEmpty()) {
+            try {
+                Map returnMap = getObjectMapper().readValue(JsonString, Map.class);
+                return returnMap;
+            } catch (Exception e) {
+                if (log.isErrorEnabled()) {
+                    log.error("JsonUtils -- parseMap -- Exception=", e);
+                }
             }
         }
-        return returnMap;
+        return null;
     }
 
 
@@ -92,7 +93,7 @@ public class JsonUtils {
                 return getObjectMapper().readValue(jsonString, clazz);
             } catch (Exception e) {
                 if (log.isErrorEnabled()) {
-                    log.error("JsonTool -- parseObject -- Exception=", e);
+                    log.error("JsonUtils -- parseObject -- Exception=", e);
                 }
             }
         }
@@ -114,7 +115,7 @@ public class JsonUtils {
                 return getObjectMapper().readValue(json, getObjectMapper().getTypeFactory().constructParametricType(ArrayList.class, clazz));
             } catch (Exception e) {
                 if (log.isErrorEnabled()) {
-                    log.error("JsonTool -- parseArray -- Exception=", e);
+                    log.error("JsonUtils -- parseArray -- Exception=", e);
                 }
             }
         }
