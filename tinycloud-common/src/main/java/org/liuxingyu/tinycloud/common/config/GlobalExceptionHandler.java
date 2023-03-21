@@ -18,11 +18,11 @@ import java.util.List;
 
 /**
  * <p>
- * 全局统一异常处理
+ *  全局统一异常处理
  * </p>
  *
  * @author liuxingyu01
- * @since 2023/1/4 14:49
+ * @since 2023/3/4 14:49
  **/
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -31,8 +31,8 @@ public class GlobalExceptionHandler {
     /**
      * 捕获404异常
      *
-     * @param e
-     * @return
+     * @param e NoHandlerFoundException
+     * @return  ApiResult
      */
     @ExceptionHandler(NoHandlerFoundException.class)
     public ApiResult<?> handle404Error(Throwable e) {
@@ -41,9 +41,10 @@ public class GlobalExceptionHandler {
 
     /**
      * 参数校验异常
+     * 使用hibernate-validator检验参数时，会抛出此异常
      *
-     * @param e
-     * @return
+     * @param e BindException
+     * @return ApiResult
      */
     @ExceptionHandler(BindException.class)
     public ApiResult<?> paramBind(BindException e) {
@@ -56,6 +57,12 @@ public class GlobalExceptionHandler {
         return buildResponseEntity(ResultCode.PARAM_ERROR.getCode(), sb.toString());
     }
 
+    /**
+     * 其他异常统一处理
+     *
+     * @param throwable Throwable
+     * @return ApiResult
+     */
     @ExceptionHandler(Exception.class)
     public ApiResult<?> exception(Throwable throwable) {
         log.error("系统处理异常：", throwable);
@@ -73,7 +80,7 @@ public class GlobalExceptionHandler {
         if (throwable instanceof BusinessException) {
             return buildResponseEntity(((BusinessException) throwable).getCode(), throwable.getMessage());
         }
-        // 其他异常
+        // 其他异常（统一返回500）
         return buildResponseEntity(ResultCode.UNKNOWN_ERROR.getCode(), ResultCode.UNKNOWN_ERROR.getDesc());
     }
 
