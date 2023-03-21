@@ -17,12 +17,15 @@ import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.PathMatcher;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -54,12 +57,12 @@ public class AuthFilter implements GlobalFilter, Ordered {
     private final static String AUTH_TOKEN_CACHE = "tinycloud:cache:token";
 
     /**
-     * 刷新redis里缓存的时间阈值
+     * 刷新redis里缓存的时间阈值（目前设置的是10分钟）
      */
-    private static final long MILLIS_MINUTE_TEN = 20 * 60 * 1000L;
+    private static final long MILLIS_MINUTE_TEN = 10 * 60 * 1000L;
 
     /**
-     * 毫秒
+     * 毫秒 --> 1秒等于1000毫秒
      */
     private static final long MILLIS_SECOND = 1000;
 
@@ -69,12 +72,10 @@ public class AuthFilter implements GlobalFilter, Ordered {
     private static final long AUTH_TIMEOUT = 1800;
 
     @Autowired
-    private AuthUrlProperties authUrlProperties;
+    private GatewayConfigProperties gatewayConfigProperties;
 
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
-
-    private final AntPathMatcher antPathMatcher = new AntPathMatcher();
 
 
     @Override
@@ -174,14 +175,60 @@ public class AuthFilter implements GlobalFilter, Ordered {
 
 
     /**
+     * 被ip黑名单拦截后的处理
+     *
+     * @param resp ServerHttpResponse
+     * @return Mono
+     */
+    private Mono<Void> ipForbidden(ServerHttpResponse resp) {
+        resp.setStatusCode(HttpStatus.OK);
+        resp.getHeaders().add("Content-Type", "application/json;charset=UTF-8");
+        Map<String, Object> map = new HashMap<>(16);
+        map.put("code", HttpStatus.FORBIDDEN.value());// 编码403
+        map.put("msg", "您的ip访问受限，请联系管理员解除限制！");
+        map.put("data", null);
+        map.put("time", System.currentTimeMillis());
+        // 转成json返回
+        String result = JsonUtils.toJsonString(map);
+        DataBuffer buffer = resp.bufferFactory().wrap(result.getBytes(StandardCharsets.UTF_8));
+        return resp.writeWith(Flux.just(buffer));
+    }
+
+    /**
      * 根据上下文路径判断是否跳过鉴权
      *
      * @param path 上下文路径
      * @return true or false
      */
     private boolean isSkip(String path) {
-        return DefaultUrlProperties.getDefaultSkipUrl().stream().anyMatch(pattern -> antPathMatcher.match(pattern, path))
-                || authUrlProperties.getSkipUrl().stream().anyMatch(pattern -> antPathMatcher.match(pattern, path));
+        return matchPaths(DefaultSkipPathProperties.getDefaultSkipAuthPath(), path) || matchPaths(gatewayConfigProperties.getSkipAuthPath(), path);
+    }
+
+    /**
+     * 匹配配置路径集合和当前请求路径(支持spring通配符'{}','*','**','?')
+     *
+     * @param configPaths 配置路径
+     * @param requestPath 请求路径
+     * @return false未匹配成功 true匹配成功
+     */
+    private boolean matchPaths(List<String> configPaths, String requestPath) {
+        if (CollectionUtils.isEmpty(configPaths) || StringUtils.isBlank(requestPath)) {
+            return false;
+        }
+        PathMatcher pathMatcher = new AntPathMatcher();
+        for (String configPath : configPaths) {
+            boolean isPattern = pathMatcher.isPattern(configPath);
+            if (isPattern) {
+                if (pathMatcher.match(configPath, requestPath)) {
+                    return true;
+                }
+            } else {
+                if (configPath.equals(requestPath)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 
