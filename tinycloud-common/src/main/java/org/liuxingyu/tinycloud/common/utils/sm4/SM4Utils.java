@@ -396,7 +396,7 @@ public class SM4Utils {
 
     /**
      * 测试
-     * secretKey和iv必须设置为16进制串（32字节）
+     * secretKey和iv必须设置为16进制串（128位，16字节）
      *
      * @param args
      * @throws IOException
