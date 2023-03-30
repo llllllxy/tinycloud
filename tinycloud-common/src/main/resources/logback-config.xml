@@ -1,10 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <configuration>
-    <!--输出格式-->
+    <!-- 读取服务名称 -->
+    <springProperty scope="context" name="application.name" source="spring.application.name"/>
     <!-- 日志存放路径 -->
-    <property name="log.path" value="/opt/tinycloud/logs" />
+    <springProperty scope="context" name="log.path" source="log.path" defaultValue="/opt/${application.name}/logs"/>
     <!-- 日志输出格式 -->
-    <property name="log.pattern" value="%d{yyyy-MM-dd} %d{HH:mm:ss.SSS} [%thread] %-5level [%X{traceId}]  %logger{20} - [%method,%line] - %msg%n" />
+    <springProperty scope="context" name="log.pattern" source="log.pattern" defaultValue="%d{yyyy-MM-dd} %d{HH:mm:ss.SSS} [%thread] %-5level [%X{traceId}]  %logger{20} - [%method,%line] - %msg%n"/>
+    <!-- 单个日志文件大小 -->
+    <springProperty scope="context" name="log.maxFileSize" source="log.max-file-size" defaultValue="20MB"/>
+    <!-- 日志最大历史天数 -->
+    <springProperty scope="context" name="log.maxHistory" source="log.max-history" defaultValue="60"/>
+    <!-- 日志文件总大小 -->
+    <springProperty scope="context" name="log.totalSizeCap" source="log.total-size-cap" defaultValue="10GB"/>
+    <!-- 日志输出级别 -->
+    <springProperty scope="context" name="log.root.level" source="log.root.level" defaultValue="info"/>
 
     <!-- 控制台输出 -->
     <appender name="consoleLog" class="ch.qos.logback.core.ConsoleAppender">
@@ -29,9 +38,9 @@
         <!--滚动策略-->
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <fileNamePattern>${log.path}/logerror.%d{yyyy-MM-dd}.%i.log</fileNamePattern><!--路径-->
-            <maxFileSize>20MB</maxFileSize>  <!-- 日志文件过大会使的编辑器打开非常慢，因此设置日志最大20MB -->
-            <maxHistory>30</maxHistory>  <!-- 保存30天 -->
-            <totalSizeCap>10GB</totalSizeCap>  <!-- 总日志大小 -->
+            <maxFileSize>${log.maxFileSize}</maxFileSize>  <!-- 日志文件过大会使的编辑器打开非常慢，因此设置日志最大20MB -->
+            <maxHistory>${log.maxHistory}</maxHistory>  <!-- 保存30天 -->
+            <totalSizeCap>${log.totalSizeCap}</totalSizeCap>  <!-- 总日志大小 -->
         </rollingPolicy>
     </appender>
 
@@ -53,14 +62,14 @@
         <!--滚动策略-->
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <fileNamePattern>${log.path}/loginfo.%d{yyyy-MM-dd}.%i.log</fileNamePattern><!--路径-->
-            <maxFileSize>20MB</maxFileSize>  <!-- 日志文件过大会使的编辑器打开非常慢，因此设置日志最大20MB -->
-            <maxHistory>30</maxHistory>  <!-- 保存30天 -->
-            <totalSizeCap>10GB</totalSizeCap>  <!-- 总日志大小 -->
+            <maxFileSize>${log.maxFileSize}</maxFileSize>  <!-- 日志文件过大会使的编辑器打开非常慢，因此设置日志最大20MB -->
+            <maxHistory>${log.maxHistory}</maxHistory>  <!-- 保存30天 -->
+            <totalSizeCap>${log.totalSizeCap}</totalSizeCap>  <!-- 总日志大小 -->
         </rollingPolicy>
     </appender>
 
     <!--全局应用该日志配置-->
-    <root level="info">
+    <root level="${log.root.level}">
         <appender-ref ref = "consoleLog"/>
         <appender-ref ref = "fileErrorLog"/>
         <appender-ref ref = "fileInfoLog"/>

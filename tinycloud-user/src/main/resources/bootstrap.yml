@@ -56,10 +56,3 @@ feign:
       default:
         connectTimeout: 5000
         readTimeout: 5000
-
-# 配置日志级别，方别调试
-logging:
-  level:
-    org.liuxingyu.tinycloud: info
-    org.springframework: info
-  config: classpath:logback-spring.xml
