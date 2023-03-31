@@ -126,6 +126,12 @@
                 <artifactId>knife4j-spring-boot-starter</artifactId>
                 <version>2.0.9</version>
             </dependency>
+            <!-- hibernate验证-->
+            <dependency>
+                <groupId>org.hibernate.validator</groupId>
+                <artifactId>hibernate-validator</artifactId>
+                <version>6.1.6.Final</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
