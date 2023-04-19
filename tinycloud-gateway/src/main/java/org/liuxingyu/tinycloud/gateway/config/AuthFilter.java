@@ -64,12 +64,12 @@ public class AuthFilter implements GlobalFilter, Ordered {
     /**
      * 毫秒 --> 1秒等于1000毫秒
      */
-    private static final long MILLIS_SECOND = 1000;
+    private static final long MILLIS_SECOND = 1000L;
 
     /**
      * 用户会话时长，默认1800秒
      */
-    private static final long AUTH_TIMEOUT = 1800;
+    private static final long AUTH_TIMEOUT = 1800L;
 
     @Autowired
     private GatewayConfigProperties gatewayConfigProperties;
@@ -92,7 +92,7 @@ public class AuthFilter implements GlobalFilter, Ordered {
             ServerWebExchange mutableExchange = exchange.mutate().request(mutableReq).build();
             return chain.filter(mutableExchange);
         }
-
+        // 从请求头或者参数里获取token
         ServerHttpResponse resp = exchange.getResponse();
         String headerToken = exchange.getRequest().getHeaders().getFirst(TOKEN_KEY);
         String paramToken = exchange.getRequest().getQueryParams().getFirst(TOKEN_KEY);
@@ -104,6 +104,7 @@ public class AuthFilter implements GlobalFilter, Ordered {
 
         // 第2步：校验token的格式是否正确
         if (Objects.nonNull(token) && token.startsWith(TOKEN_PREFIX)) {
+            // 去除TOKEN_PREFIX
             token = token.replace(TOKEN_PREFIX, "");
         } else { // token不是以TOKEN_PREFIX开头的，不合格
             return unAuth(resp);
@@ -118,7 +119,7 @@ public class AuthFilter implements GlobalFilter, Ordered {
         }
         // 从jwt的Payload里获取auth_token，这是会话的redis-key，它在redis里面存着用户信息，包括userId，username等
         String auth_token = (String) claims.get("auth_token");
-        // 第4步：校验auth_token在redis里是否存在
+        // 第4步：校验auth_token在redis里是否存在，不存在说明会话已失效
         String authString = stringRedisTemplate.opsForValue().get(AUTH_TOKEN_CACHE + ":" + auth_token);
         if (StringUtils.isBlank(authString)) {
             return unAuth(resp);

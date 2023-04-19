@@ -16,7 +16,7 @@ import java.util.*;
 public class JwtUtils {
 
     // jwt签名密钥
-    private static final String jwtSecret = "828jsjkwksk2ii2kskskss";
+    private static final String jwtSecret = "K$N)A3*sGGf<wo*22*%&(DF";
 
 
     /**

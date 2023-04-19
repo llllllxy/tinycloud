@@ -39,8 +39,8 @@ spring:
         group: DEFAULT_GROUP
         # 配置文件格式
         file-extension: yml
-        # 共享配置
-        shared-configs:
+        # 扩展配置
+        extension-configs:
           - data-id: tinycloud-common-dev.yml
             group: DEFAULT_GROUP
             refresh: true
