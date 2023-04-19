@@ -9,6 +9,7 @@ import org.springframework.http.converter.HttpMessageConversionException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
@@ -54,8 +55,32 @@ public class GlobalExceptionHandler {
         for (FieldError error : fieldErrors) {
             sb.append(error.getField()).append("：").append(error.getDefaultMessage()).append(", ");
         }
-        return buildResponseEntity(ResultCode.PARAM_ERROR.getCode(), sb.toString());
+        String message = sb.toString();
+        if (message != null && message.length() > 2) {
+            message = message.substring(0, message.length() - 2);
+        }
+        return buildResponseEntity(ResultCode.PARAM_ERROR.getCode(), message);
     }
+
+
+    /**
+     * 参数校验异常1
+     */
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ApiResult<?> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+        // 对校验结果统一输出
+        List<FieldError> fieldErrors = e.getBindingResult().getFieldErrors();
+        StringBuilder sb = new StringBuilder();
+        for (FieldError error : fieldErrors) {
+            sb.append(error.getField()).append("：").append(error.getDefaultMessage()).append(", ");
+        }
+        String message = sb.toString();
+        if (message != null && message.length() > 2) {
+            message = message.substring(0, message.length() - 2);
+        }
+        return buildResponseEntity(ResultCode.PARAM_ERROR.getCode(), message);
+    }
+
 
     /**
      * 其他异常统一处理
