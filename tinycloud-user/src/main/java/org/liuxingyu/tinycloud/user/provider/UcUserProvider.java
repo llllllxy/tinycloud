@@ -1,5 +1,4 @@
-package org.liuxingyu.tinycloud.user.api;
-
+package org.liuxingyu.tinycloud.user.provider;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -16,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = "用户中心-系统用户服务接口", value = "用户中心-系统用户服务接口")
 @RestController
 @RequestMapping("/api/user")
-public class UcUserApi {
+public class UcUserProvider {
 
     @Autowired
     private UcUserService ucUserService;

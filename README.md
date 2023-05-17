@@ -30,6 +30,8 @@ docker run -d -e MODE=standalone -e PREFER_HOST_MODE=hostname -e SPRING_DATASOUR
 
 
 ### 服务模块和包名风格
+#### tinycloud-common
+- src\main\java\org\liuxingyu\tinycloud\common 存储公共组件封装
 
 #### tinycloud-api
 - src\main\java\org\liuxingyu\tinycloud\api 存储feign调用接口
@@ -41,11 +43,11 @@ docker run -d -e MODE=standalone -e PREFER_HOST_MODE=hostname -e SPRING_DATASOUR
     - param      存放PARAM对象，用于服务间调用和前端调用传参
     - vo         存放VO对象，用于返回给web前端
 
-#### tinycloud-***-server
-- src\main\java\org\liuxingyu\tinycloud\server 提供内部服务和前端web服务
+#### tinycloud-***
+- src\main\java\org\liuxingyu\tinycloud\*** 提供内部服务和前端web服务
     - constant   常量、枚举、自定义枚举错误码
-    - web        控制层，主要针对于前端web服务接口
-    - api        控制层，主要针对于服务内部调用接口(feign)
+    - controller 控制层，主要针对于前端web服务接口
+    - provider   控制层，主要针对于服务内部调用接口(feign)
     - service    服务层
     - mapper     持久层
     - mq         消息队列
@@ -54,13 +56,14 @@ docker run -d -e MODE=standalone -e PREFER_HOST_MODE=hostname -e SPRING_DATASOUR
 
 #### 技术栈
 
-| 框架                       | 版本号        | 描述                                                         |
+| 框架                        | 版本号         | 描述                                                         |
 | -------------------------- | ------------- | ------------------------------------------------------------ |
-| spring-cloud               | Hoxton.SR9    |                                                              |
-| spring-cloud-alibaba       | 2.2.6.RELEASE |                                                              |
-| spring-boot                | 2.3.6.RELEASE |                                                              |
+| springcloud               | Hoxton.SR9    |                                                              |
+| springcloud-alibaba       | 2.2.6.RELEASE |
+| nacos                      | 1.4.2         | 配置中心、注册中心              |
+| springboot                | 2.3.6.RELEASE |                                                              |
 | openfeign                  | 2.2.6.RELEASE | 微服务接口调用组件                                           |
-| mybatis-plus               | 3.5.2         |                                                              |
+| mybatis-plus               | 3.5.3.1       | 增强MyBatis                                                             |
 | druid                      | 1.2.16        |                                                              |
 | redisson                   | 3.16.0        | redisson实现分布式锁                                         |
 | jjwt                       | 0.9.1         | 生成jwt toke认证                                             | |

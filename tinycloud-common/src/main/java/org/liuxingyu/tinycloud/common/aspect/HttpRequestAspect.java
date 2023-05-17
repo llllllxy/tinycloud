@@ -68,9 +68,9 @@ public class HttpRequestAspect {
 
         Object result = proceedingJoinPoint.proceed();
         // 打印执行结果
-        log.info("Response Result  : {}", JsonUtils.toJsonString(result));
+        log.info("Response Result : {}", JsonUtils.toJsonString(result));
         // 执行耗时
-        log.info("Time-Consuming : {} ms", System.currentTimeMillis() - startTime);
+        log.info("Time Consuming  : {} ms", System.currentTimeMillis() - startTime);
         log.info("=========================================== End ===========================================");
         return result;
     }

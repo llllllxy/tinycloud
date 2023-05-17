@@ -22,8 +22,8 @@ public enum ResultCode {
     PRECONDITION_FAILED(428, "要求先决条件"),
     NOT_SUPPORT(409, "不支持的请求"),
     ALREADY_EXECUTING(410, "程序正在执行，请稍后再试"),
-    UNKNOWN_ERROR(500, "系统未知错误");
-
+    UNKNOWN_ERROR(500, "系统未知错误"),
+    NOT_IMPLEMENTED(501, "接口暂未实现");
     /**
      * 错误码
      */

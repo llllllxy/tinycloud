@@ -23,7 +23,7 @@ public class AuthConstant {
     /**
      * 图片验证码 redis-key
      */
-    public static final String AUTH_CAPTCHA_CODE_REDIS_KEY = "tinycloud:captchacodes";
+    public static final String AUTH_CAPTCHA_CODE_REDIS_KEY = "tinycloud:captcha_codes";
 
     /**
      * 缓存用户会话redis的key
@@ -34,10 +34,10 @@ public class AuthConstant {
     public final static String AUTH_SALT = "ymp8R3Vg7Kv5$y5fM3*xl&ins7SZcTEY";
 
     // 缓存同一账号登录会话数
-    public final static String AUTH_USER_SESSION_NUMS_REDIS_KEY = "tinycloud:user-session-nums";
+    public final static String AUTH_USER_SESSION_NUMS_REDIS_KEY = "tinycloud:user_session_nums";
 
     // 缓存尝试登录次数
-    public final static String AUTH_LOGIN_ATTEMPT_TIMES_REDIS_KEY = "tinycloud:login-attempt-times";
+    public final static String AUTH_LOGIN_ATTEMPT_TIMES_REDIS_KEY = "tinycloud:login_attempt_times";
 
     // 缓存用户信息
     public final static String AUTH_USERINFO_CACHE_REDIS_KEY = "tinycloud:cache:userinfo";
