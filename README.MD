@@ -45,7 +45,7 @@ docker run -d -e MODE=standalone -e PREFER_HOST_MODE=hostname -e SPRING_DATASOUR
 - src\main\java\org\liuxingyu\tinycloud\server 提供内部服务和前端web服务
     - constant   常量、枚举、自定义枚举错误码
     - web        控制层，主要针对于前端web服务接口
-    - api        控制层，主要针对于服务内部调用接口
+    - api        控制层，主要针对于服务内部调用接口(feign)
     - service    服务层
     - mapper     持久层
     - mq         消息队列

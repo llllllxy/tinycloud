@@ -20,4 +20,9 @@ public class ApiServerConstants {
      * 消息中心的serviceid
      */
     public static final String MESSAGE_SERVER = "tinycloud-message";
+
+    /**
+     * 认证中心的serviceid
+     */
+    public static final String AUTH_SERVER = "tinycloud-auth";
 }

@@ -23,7 +23,7 @@ spring:
     nacos:
       discovery:
         # 服务注册地址
-        server-addr: 192.168.3.189:38848
+        server-addr: 192.168.5.46:38848
         username: nacos
         password: nacos
         # namespace: Test

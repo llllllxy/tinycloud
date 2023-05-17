@@ -1,6 +1,6 @@
 package org.liuxingyu.tinycloud.user.controller;
 
-import org.liuxingyu.tinycloud.common.base.Result;
+import org.liuxingyu.tinycloud.common.model.ApiResult;
 import org.liuxingyu.tinycloud.user.config.TinyCloudUserConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,10 +25,10 @@ public class TestController {
 
 
     @RequestMapping("/testuser")
-    public Result testuser(HttpServletRequest request) {
+    public ApiResult<?> testuser(HttpServletRequest request) {
         log.info("userId = " + request.getHeader("USER_ID"));
 
-        return Result.ok("调用成功", tinyCloudUserConfig.getName());
+        return ApiResult.success("调用成功", tinyCloudUserConfig.getName());
     }
 
 }

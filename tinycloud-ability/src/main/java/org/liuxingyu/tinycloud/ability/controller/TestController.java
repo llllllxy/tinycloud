@@ -1,6 +1,6 @@
 package org.liuxingyu.tinycloud.ability.controller;
 
-import org.liuxingyu.tinycloud.common.base.Result;
+import org.liuxingyu.tinycloud.common.model.ApiResult;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,8 +21,8 @@ public class TestController {
 
 
     @RequestMapping("/testability")
-    public Result testability() {
-        return Result.ok("调用成功", name);
+    public ApiResult<?> testability() {
+        return ApiResult.success("调用成功", name);
     }
 
 }
