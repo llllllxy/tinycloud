@@ -1,8 +1,8 @@
 ## tinycloud微服务框架
 
 ### 服务模块说明
-1. tinycloud-gateway     服务，网关（网关层鉴权，还是分布到各个组件呢，分布到各个组件呢的话则需要tinycloud-auth-client组件）
-2. tinycloud-common      公共组件jar包（公共方法等）
+1. tinycloud-gateway     服务，网关（网关层统一路由转发，统一鉴权，只有网关层服务暴露给前端调用，其他均为内部服务）
+2. tinycloud-common      公共组件jar包（公共配置和工具类等）
 3. tinycloud-api         公共组件jar包（openfeign调用声明接口类）
 4. tinycloud-bean        公共组件jar包（所有pojo的声明都存在此类，包括dto，entity，vo，param等）
 5. tinycloud-user        服务，用户中心
@@ -32,6 +32,9 @@ docker run -d -e MODE=standalone -e PREFER_HOST_MODE=hostname -e SPRING_DATASOUR
 ### 服务模块和包名风格
 #### tinycloud-common
 - src\main\java\org\liuxingyu\tinycloud\common 存储公共组件封装
+
+#### tinycloud-gateway
+- src\main\java\org\liuxingyu\tinycloud\gateway 服务网关，负责路由转发，统一鉴权，流量控制
 
 #### tinycloud-api
 - src\main\java\org\liuxingyu\tinycloud\api 存储feign调用接口
