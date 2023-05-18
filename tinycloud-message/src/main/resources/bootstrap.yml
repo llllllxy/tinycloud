@@ -45,10 +45,3 @@ spring:
             group: DEFAULT_GROUP
             refresh: true
 
-# 配置日志级别，方别调试
-logging:
-  level:
-    org.liuxingyu.tinycloud: info
-    org.springframework: info
-
-

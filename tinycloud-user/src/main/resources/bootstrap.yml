@@ -46,11 +46,3 @@ spring:
           - data-id: tinycloud-common-dev.yml
             group: DEFAULT_GROUP
             refresh: true
-
-# Feign调用配置
-feign:
-  client:
-    config:
-      default:
-        connectTimeout: 5000
-        readTimeout: 5000
