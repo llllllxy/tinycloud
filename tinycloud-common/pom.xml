@@ -69,6 +69,7 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
+            <scope>runtime</scope>
         </dependency>
         <!--阿里数据库连接池 -->
         <dependency>
@@ -107,6 +108,11 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-pool2</artifactId>
         </dependency>
+        <!-- commons-fileupload -->
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+        </dependency>
         <!-- poi -->
         <dependency>
             <groupId>org.apache.poi</groupId>
@@ -139,6 +145,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
