@@ -42,7 +42,7 @@ docker run -d -e MODE=standalone -e PREFER_HOST_MODE=hostname -e SPRING_DATASOUR
 #### tinycloud-bean
 - src\main\java\com\liuxingyu\tinycloud\bean 存储公共POJO类
     - dto        存放DTO对象，用于服务间调用返回
-    - entity     存放DO对象，和数据表一一对应
+    - entity     存放DO对象，和数据库表一一对应
     - param      存放PARAM对象，用于服务间调用和前端调用传参
     - vo         存放VO对象，用于返回给web前端
 

@@ -39,12 +39,20 @@ public class PageModel<T> implements Serializable {
         this.totalCount = totalCount;
     }
 
+    public void setTotalCount(Long totalCount) {
+        this.totalCount = totalCount.intValue();
+    }
+
     public Integer getTotalPage() {
         return totalPage;
     }
 
     public void setTotalPage(Integer totalPage) {
         this.totalPage = totalPage;
+    }
+
+    public void setTotalPage(Long totalPage) {
+        this.totalPage = totalPage.intValue();
     }
 
     public List<T> getRecords() {
