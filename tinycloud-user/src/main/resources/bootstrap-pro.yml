@@ -1,0 +1,27 @@
+# SpringCloud
+spring:
+  cloud:
+    nacos:
+      discovery:
+        # 服务注册地址
+        server-addr: nacos-pro:38848
+        username: nacos
+        password: nacos
+        # namespace: Test
+        group: DEFAULT_GROUP
+      config:
+        # 配置中心地址
+        server-addr: ${spring.cloud.nacos.discovery.server-addr}
+        username: nacos
+        password: nacos
+        # 命名空间(注意是id)，不配置就是默认的public
+        # namespace: Test
+        # 分组
+        group: DEFAULT_GROUP
+        # 配置文件格式
+        file-extension: yml
+        # 扩展配置
+        extension-configs:
+          - data-id: tinycloud-common-pro.yml
+            group: DEFAULT_GROUP
+            refresh: true

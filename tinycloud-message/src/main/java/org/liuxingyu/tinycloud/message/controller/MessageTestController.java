@@ -1,7 +1,7 @@
 package org.liuxingyu.tinycloud.message.controller;
 
 import org.liuxingyu.tinycloud.api.UserApiClient;
-import org.liuxingyu.tinycloud.bean.entity.UcUser;
+import org.liuxingyu.tinycloud.bean.vo.UcUserVo;
 import org.liuxingyu.tinycloud.common.model.ApiResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +15,7 @@ public class MessageTestController {
     private UserApiClient userApiClient;
 
     @GetMapping("/detail")
-    public ApiResult<UcUser> detail(@RequestParam("userId") String userId) {
+    public ApiResult<UcUserVo> detail(@RequestParam("userId") String userId) {
         return userApiClient.detail(userId);
     }
 }

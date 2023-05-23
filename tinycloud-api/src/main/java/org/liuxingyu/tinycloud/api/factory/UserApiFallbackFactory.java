@@ -2,7 +2,7 @@ package org.liuxingyu.tinycloud.api.factory;
 
 import feign.hystrix.FallbackFactory;
 import org.liuxingyu.tinycloud.api.UserApiClient;
-import org.liuxingyu.tinycloud.bean.entity.UcUser;
+import org.liuxingyu.tinycloud.bean.vo.UcUserVo;
 import org.liuxingyu.tinycloud.common.model.ApiResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,8 +23,8 @@ public class UserApiFallbackFactory implements FallbackFactory<UserApiClient> {
         return new UserApiClient() {
 
             @Override
-            public ApiResult<UcUser> detail(String username) {
-                return ApiResult.fail("获取用户信息失败:" + throwable.getMessage());
+            public ApiResult<UcUserVo> detail(String username) {
+                return ApiResult.fail("获取用户信息失败: " + throwable.getMessage());
             }
 
         };

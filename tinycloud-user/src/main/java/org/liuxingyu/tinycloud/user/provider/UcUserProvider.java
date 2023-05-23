@@ -3,6 +3,7 @@ package org.liuxingyu.tinycloud.user.provider;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.liuxingyu.tinycloud.bean.entity.UcUser;
+import org.liuxingyu.tinycloud.bean.vo.UcUserVo;
 import org.liuxingyu.tinycloud.common.model.ApiResult;
 import org.liuxingyu.tinycloud.user.service.UcUserService;
 import org.slf4j.Logger;
@@ -26,7 +27,7 @@ public class UcUserProvider {
 
     @ApiOperation(value = "系统用户获取", notes = "系统用户获取")
     @GetMapping(value = "/detail")
-    public ApiResult<UcUser> detail(@RequestParam("userId") String userId, HttpServletRequest request) {
+    public ApiResult<UcUserVo> detail(@RequestParam("userId") String userId, HttpServletRequest request) {
         // 打印请求头的信息
         Enumeration<String> headerNames = request.getHeaderNames();
         if (Objects.nonNull(headerNames)) {
@@ -38,9 +39,9 @@ public class UcUserProvider {
         }
 
         // 调用service层
-        UcUser ucUser = ucUserService.detail(userId);
-        if (ucUser != null) {
-            return ApiResult.success(ucUser, "查询成功!");
+        UcUserVo ucUserVo = ucUserService.detail(userId);
+        if (ucUserVo != null) {
+            return ApiResult.success(ucUserVo, "查询成功!");
         } else {
             return ApiResult.fail("查询失败，用户不存在!");
         }

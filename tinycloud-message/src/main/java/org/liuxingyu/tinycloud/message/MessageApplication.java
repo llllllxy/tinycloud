@@ -41,7 +41,8 @@ public class MessageApplication {
                 "-------------------------------------------------------------------------\n\t" +
                 "Access URLs:\n\t" +
                 "Local: \t\thttp://localhost:" + port + path + "/\n\t" +
-                "External: \thttp://" + ip + ":" + port + path + "/\n" +
+                "External: \thttp://" + ip + ":" + port + path + "/\n\t" +
+                "Swagger: \thttp://" + ip + ":" + port + path + "/doc.html\n" +
                 "-------------------------------------------------------------------------");
     }
 }

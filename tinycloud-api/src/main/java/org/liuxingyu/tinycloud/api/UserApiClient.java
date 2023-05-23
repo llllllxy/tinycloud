@@ -2,7 +2,7 @@ package org.liuxingyu.tinycloud.api;
 
 import org.liuxingyu.tinycloud.api.constant.ApiServerConstants;
 import org.liuxingyu.tinycloud.api.factory.UserApiFallbackFactory;
-import org.liuxingyu.tinycloud.bean.entity.UcUser;
+import org.liuxingyu.tinycloud.bean.vo.UcUserVo;
 import org.liuxingyu.tinycloud.common.model.ApiResult;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface UserApiClient {
 
     @GetMapping(value = "/api/user/detail")
-    ApiResult<UcUser> detail(@RequestParam("userId") String userId);
+    ApiResult<UcUserVo> detail(@RequestParam("userId") String userId);
 }
 

@@ -1,6 +1,6 @@
 package org.liuxingyu.tinycloud.user.service;
 
-import org.liuxingyu.tinycloud.bean.entity.UcUser;
+import org.liuxingyu.tinycloud.bean.vo.UcUserVo;
 
 /**
  * <p>
@@ -12,5 +12,5 @@ import org.liuxingyu.tinycloud.bean.entity.UcUser;
  */
 public interface UcUserService {
 
-    UcUser detail(String userId);
+    UcUserVo detail(String userId);
 }

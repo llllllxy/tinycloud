@@ -14,7 +14,7 @@ import java.net.UnknownHostException;
 /**
  * @author liuxingyu01
  * @date 2022-12-07 9:38
- * @description
+ * @description 网关服务
  **/
 @EnableDiscoveryClient // nacos注册中心配置
 @SpringBootApplication
@@ -37,7 +37,8 @@ public class GatewayApplication {
                 "-------------------------------------------------------------------------\n\t" +
                 "Access URLs:\n\t" +
                 "Local: \t\thttp://localhost:" + port + "/\n\t" +
-                "External: \thttp://" + ip + ":" + port + "/\n" +
+                "External: \thttp://" + ip + ":" + port + "/\n\t" +
+                "Swagger: \thttp://" + ip + ":" + port + path + "/doc.html\n" +
                 "-------------------------------------------------------------------------");
     }
 }
