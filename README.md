@@ -1,14 +1,15 @@
 ## tinycloud微服务框架
 
 ### 服务模块说明
-1. tinycloud-gateway     服务，网关（网关层统一路由转发，统一鉴权，只有网关层服务暴露给前端调用，其他均为内部服务）
+1. tinycloud-gateway     服务，网关（网关层统一路由转发，统一鉴权，只有网关层服务暴露给前端调用，其他均为内部服务），端口8080
 2. tinycloud-common      公共组件jar包（公共配置和工具类等）
 3. tinycloud-api         公共组件jar包（openfeign调用声明接口类）
 4. tinycloud-bean        公共组件jar包（所有pojo的声明都存在此类，包括dto，entity，vo，param等）
-5. tinycloud-user        服务，用户中心
-6. tinycloud-ability     服务，能力中心
-7. tinycloud-message     服务，消息中心
-7. tinycloud-auth        服务，认证中心
+5. tinycloud-user        服务，用户中心，端口8081
+6. tinycloud-ability     服务，能力中心，端口8082
+7. tinycloud-message     服务，消息中心，端口8083
+8. tinycloud-auth        服务，认证中心，端口8084
+9. tinycloud-oss         服务，文件中心，端口8085
 
 ### nacos说明
 对应nacos版本1.4.2，docker中运行脚本如下
