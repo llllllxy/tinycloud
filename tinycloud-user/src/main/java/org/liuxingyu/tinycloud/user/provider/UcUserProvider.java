@@ -40,7 +40,7 @@ public class UcUserProvider {
         // 调用service层
         UcUser ucUser = ucUserService.detail(userId);
         if (ucUser != null) {
-            return ApiResult.success("查询成功!", ucUser);
+            return ApiResult.success(ucUser, "查询成功!");
         } else {
             return ApiResult.fail("查询失败，用户不存在!");
         }

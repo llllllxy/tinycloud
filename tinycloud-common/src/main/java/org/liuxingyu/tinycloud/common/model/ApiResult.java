@@ -94,7 +94,7 @@ public class ApiResult<T> implements Serializable {
      * @return ApiResult<T>
      */
     public static <T> ApiResult<T> success(T data) {
-        return success(ResultCode.SUCCESS.getDesc(), data);
+        return success(data, ResultCode.SUCCESS.getDesc());
     }
 
     /**
@@ -105,7 +105,7 @@ public class ApiResult<T> implements Serializable {
      * @param <T>  泛型
      * @return ApiResult<T>
      */
-    public static <T> ApiResult<T> success(String msg, T data) {
+    public static <T> ApiResult<T> success(T data, String msg) {
         return new ApiResult<>(ResultCode.SUCCESS.getCode(), data, msg);
     }
 
