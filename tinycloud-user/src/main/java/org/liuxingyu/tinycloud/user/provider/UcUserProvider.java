@@ -2,9 +2,10 @@ package org.liuxingyu.tinycloud.user.provider;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.liuxingyu.tinycloud.bean.entity.UcUser;
+import org.liuxingyu.tinycloud.bean.param.UcUserPageQuery;
 import org.liuxingyu.tinycloud.bean.vo.UcUserVo;
 import org.liuxingyu.tinycloud.common.model.ApiResult;
+import org.liuxingyu.tinycloud.common.model.PageModel;
 import org.liuxingyu.tinycloud.user.service.UcUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,6 +43,19 @@ public class UcUserProvider {
         UcUserVo ucUserVo = ucUserService.detail(userId);
         if (ucUserVo != null) {
             return ApiResult.success(ucUserVo, "查询成功!");
+        } else {
+            return ApiResult.fail("查询失败，用户不存在!");
+        }
+    }
+
+
+    @ApiOperation(value = "系统用户分页查询", notes = "系统用户分页查询")
+    @PostMapping(value = "/query")
+    public ApiResult<PageModel<UcUserVo>> query(@RequestBody UcUserPageQuery pageQuery){
+        // 调用service层
+        PageModel<UcUserVo> ucUserVoPage = ucUserService.query(pageQuery);
+        if (ucUserVoPage != null) {
+            return ApiResult.success(ucUserVoPage, "查询成功!");
         } else {
             return ApiResult.fail("查询失败，用户不存在!");
         }

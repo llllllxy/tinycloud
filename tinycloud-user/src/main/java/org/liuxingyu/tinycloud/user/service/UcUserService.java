@@ -1,6 +1,8 @@
 package org.liuxingyu.tinycloud.user.service;
 
+import org.liuxingyu.tinycloud.bean.param.UcUserPageQuery;
 import org.liuxingyu.tinycloud.bean.vo.UcUserVo;
+import org.liuxingyu.tinycloud.common.model.PageModel;
 
 /**
  * <p>
@@ -13,4 +15,8 @@ import org.liuxingyu.tinycloud.bean.vo.UcUserVo;
 public interface UcUserService {
 
     UcUserVo detail(String userId);
+
+    PageModel<UcUserVo> query(UcUserPageQuery pageQuery);
+
+    PageModel<UcUserVo> query2(UcUserPageQuery pageQuery);
 }
