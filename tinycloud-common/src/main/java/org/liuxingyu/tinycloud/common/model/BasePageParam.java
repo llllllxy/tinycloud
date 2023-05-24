@@ -25,14 +25,14 @@ public class BasePageParam implements Serializable {
     private Integer pageSize = 10;
 
     /**
-     * 根据XXX ordey by
+     * 排序字段，根据XXX ordey by
      */
-    private String sort;
+    private String sortFiled;
 
     /**
      * 降序还是升序，asc or desc
      */
-    private String order;
+    private String sortType;
 
     public Integer getPageNo() {
         return pageNo;
@@ -50,19 +50,19 @@ public class BasePageParam implements Serializable {
         this.pageSize = pageSize;
     }
 
-    public String getSort() {
-        return sort;
+    public String getSortFiled() {
+        return sortFiled;
     }
 
-    public void setSort(String sort) {
-        this.sort = sort;
+    public void setSortFiled(String sortFiled) {
+        this.sortFiled = sortFiled;
     }
 
-    public String getOrder() {
-        return order;
+    public String getSortType() {
+        return sortType;
     }
 
-    public void setOrder(String order) {
-        this.order = order;
+    public void setSortType(String sortType) {
+        this.sortType = sortType;
     }
 }
