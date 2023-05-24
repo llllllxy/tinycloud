@@ -36,6 +36,16 @@ public final class GlobalConstant {
     public static final Integer NOT_DELETED = 0;
 
     /**
+     * 升序排序
+     */
+    public static final String ASC = "asc";
+
+    /**
+     * 降序排序
+     */
+    public static final String DESC = "desc";
+
+    /**
      * 统一接口限流 redis-key
      */
     public static final String LIMIT_KEY = "tinycloud:limit";
