@@ -3,11 +3,16 @@ package org.liuxingyu.tinycloud.common.utils.idgen;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.management.ManagementFactory;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 
 /**
  * <p>
- *  雪花算法生成分布式ID
+ * 雪花算法生成分布式ID
  * </p>
  *
  * @author liuxingyu01
@@ -16,6 +21,7 @@ import java.util.Random;
 public class Snowflake {
     final static Logger log = LoggerFactory.getLogger(Snowflake.class);
 
+    // 时间起始标记点，一旦确定不能变动
     private final static long TWEPOCH = 1288834974657L;
 
     // 机器标识位数
@@ -24,11 +30,11 @@ public class Snowflake {
     // 数据中心标识位数
     private final static long DATA_CENTER_ID_BITS = 5L;
 
-    // 机器ID最大值 31
-    private final static long MAX_WORKER_ID = -1L ^ (-1L << WORKER_ID_BITS);
+    // 工作机器ID最大值 31
+    private final static long MAX_WORKER_ID = ~(-1L << WORKER_ID_BITS);
 
     // 数据中心ID最大值 31
-    private final static long MAX_DATA_CENTER_ID = -1L ^ (-1L << DATA_CENTER_ID_BITS);
+    private final static long MAX_DATA_CENTER_ID = ~(-1L << DATA_CENTER_ID_BITS);
 
     // 毫秒内自增位
     private final static long SEQUENCE_BITS = 12L;
@@ -41,7 +47,8 @@ public class Snowflake {
     // 时间毫秒左移22位
     private final static long TIMESTAMP_LEFT_SHIFT = SEQUENCE_BITS + WORKER_ID_BITS + DATA_CENTER_ID_BITS;
 
-    private final static long SEQUENCE_MASK = -1L ^ (-1L << SEQUENCE_BITS);
+    // 序号掩码，用于与自增后的序列号进行位“与”操作，如果值为 0，则代表自增后的序列号超过了 4095。
+    private final static long SEQUENCE_MASK = ~(-1L << SEQUENCE_BITS);
 
     private long lastTimestamp = -1L;
 
@@ -53,10 +60,15 @@ public class Snowflake {
     private static volatile Snowflake snowflake = null;
     private static final Object lock = new Object();
 
+    // IP 地址信息，用来生成工作机器 ID 和数据中心 ID。
+    private InetAddress address;
+
+
     // 单例禁止new实例化
     private Snowflake(long workerId, long dataCenterId) {
         if (workerId > MAX_WORKER_ID || workerId < 0) {
-            workerId = getRandom(MAX_WORKER_ID);
+            throw new IllegalArgumentException(
+                    String.format("%s 工作机器ID最大值 必须是 %d 到 %d 之间", dataCenterId, 0, MAX_WORKER_ID));
         }
         if (dataCenterId > MAX_DATA_CENTER_ID || dataCenterId < 0) {
             throw new IllegalArgumentException(
@@ -65,6 +77,63 @@ public class Snowflake {
         this.workerId = workerId;
         this.dataCenterId = dataCenterId;
     }
+
+    // 单例禁止new实例化
+    private Snowflake(InetAddress address) {
+        this.address = address;
+        this.dataCenterId = getDataCenterId(MAX_DATA_CENTER_ID);
+        this.workerId = getWorkerId(dataCenterId, MAX_DATA_CENTER_ID);
+    }
+
+    /**
+     * 雪花算法 ID 生成器。
+     */
+    private Snowflake() {
+        this(null);
+    }
+
+
+    /**
+     * 根据 MAC + PID 的 hashCode 获取 16 个低位生成工作机器 ID。
+     */
+    protected long getWorkerId(long dataCenterId, long maxWorkerId) {
+        StringBuilder mpId = new StringBuilder();
+        mpId.append(dataCenterId);
+        String name = ManagementFactory.getRuntimeMXBean().getName();
+        if (name != null && !name.isEmpty()) {
+            // GET jvmPid
+            mpId.append(name.split("@")[0]);
+        }
+        // MAC + PID 的 hashCode 获取16个低位
+        return (mpId.toString().hashCode() & 0xffff) % (maxWorkerId + 1);
+    }
+
+
+    /**
+     * 根据网卡 MAC 地址计算余数作为数据中心 ID。
+     */
+    protected long getDataCenterId(long maxDataCenterId) {
+        long id = 0L;
+        try {
+            if (this.address == null) {
+                this.address = InetAddress.getLocalHost();
+            }
+            NetworkInterface network = NetworkInterface.getByInetAddress(this.address);
+            if (null == network) {
+                id = 1L;
+            } else {
+                byte[] mac = network.getHardwareAddress();
+                if (null != mac) {
+                    id = ((0x000000FF & (long) mac[mac.length - 2]) | (0x0000FF00 & (((long) mac[mac.length - 1]) << 8))) >> 6;
+                    id = id % (maxDataCenterId + 1);
+                }
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("dataCenterId generate fail", e);
+        }
+        return id;
+    }
+
 
     /**
      * 获取单例（懒汉式单例，有线程安全问题，所以加锁）
@@ -75,10 +144,7 @@ public class Snowflake {
         if (snowflake == null) {
             synchronized (lock) {
                 if (snowflake == null) {
-                    long workerId = getRandom(MAX_WORKER_ID);
-                    long dataCenterId = getRandom(MAX_DATA_CENTER_ID);
-
-                    snowflake = new Snowflake(workerId, dataCenterId);
+                    snowflake = new Snowflake();
                 }
             }
         }
@@ -86,9 +152,9 @@ public class Snowflake {
     }
 
     /**
-     * 生成1-31之间的随机数
+     * 生成1-31之间的随机数（用于随机生成机器id和数据中心id）
      *
-     * @return
+     * @return long
      */
     private static long getRandom(long maxId) {
         int max = (int) (maxId);
@@ -100,6 +166,7 @@ public class Snowflake {
 
     /**
      * 根据算法，生成下一个ID
+     *
      * @return
      */
     private synchronized long generateId() {
@@ -158,18 +225,34 @@ public class Snowflake {
         return Snowflake.getInstance().generateId();
     }
 
-
     /**
      * 测试调用
      *
      * @param args
      */
     public static void main(String[] args) {
+        // 测试万条耗时
         long start = System.currentTimeMillis();
-
         for (int i = 0, len = 10000; i < len; i++) {
             System.out.println(nextId());
         }
         System.out.println("10000耗时: " + (System.currentTimeMillis() - start) + "ms");
+
+        // 测试ID生成是否重复验证
+        Set<String> set = new HashSet<>();
+        try {
+            for (int i = 0; i < 10000; i++) {
+                String id = nextId();
+                if (set.contains(id)) {
+                    throw new Exception(id + " exists");
+                }
+                set.add(id);
+                System.out.println(id);
+                // Thread.sleep(100);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
+
 }
