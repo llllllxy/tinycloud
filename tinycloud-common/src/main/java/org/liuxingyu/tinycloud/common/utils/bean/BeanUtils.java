@@ -69,6 +69,21 @@ public class BeanUtils {
     }
 
     /**
+     * Bean属性复制工具方法
+     *
+     * @param source 源对象
+     * @param target 目标对象
+     */
+    public static void copyProperties(Object source, Object target) {
+        try {
+            org.springframework.beans.BeanUtils.copyProperties(source, target);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            throw new RuntimeException("拷贝bean失败");
+        }
+    }
+
+    /**
      * bean转map
      *
      * @param source bean
