@@ -1,5 +1,6 @@
 package org.liuxingyu.tinycloud.common.utils.idgen;
 
+import org.liuxingyu.tinycloud.common.utils.LocalHostUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -144,7 +145,7 @@ public class Snowflake {
         if (snowflake == null) {
             synchronized (lock) {
                 if (snowflake == null) {
-                    snowflake = new Snowflake();
+                    snowflake = new Snowflake(LocalHostUtils.getInetAddress());
                 }
             }
         }
