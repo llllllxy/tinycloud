@@ -15,7 +15,9 @@ public enum SystemCode {
     ABILITY_CENTER(3000, "能力中心"),
     MESSAGE_CENTER(4000, "消息中心"),
     JOB_CENTER(5000, "调度中心"),
-    GATEWAY(5000, "网关服务"),
+    OSS_CENTER(6000, "文件中心"),
+    GATEWAY(7000, "网关"),
+
     SYSTEM(9000, "系统管理服务"),
     ;
 
