@@ -20,7 +20,7 @@ import javax.validation.Payload;
 @Constraint(validatedBy = TimeFormatValidator.class)
 @Target({ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE, ElementType.CONSTRUCTOR, ElementType.PARAMETER, ElementType.TYPE_USE})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface TimeFormat {
+public @interface TimeFormatCheck {
 
     /**
      * 日期格式

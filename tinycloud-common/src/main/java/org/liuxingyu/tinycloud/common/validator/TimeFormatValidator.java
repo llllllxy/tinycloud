@@ -1,7 +1,7 @@
 package org.liuxingyu.tinycloud.common.validator;
 
 import org.apache.commons.lang3.StringUtils;
-import org.liuxingyu.tinycloud.common.annotation.TimeFormat;
+import org.liuxingyu.tinycloud.common.annotation.TimeFormatCheck;
 
 import javax.validation.ConstraintValidator;
 
@@ -18,7 +18,7 @@ import java.text.SimpleDateFormat;
  * @author liuxingyu01
  * @since 2023-03-20 09:09:38
  */
-public class TimeFormatValidator implements ConstraintValidator<TimeFormat, String> {
+public class TimeFormatValidator implements ConstraintValidator<TimeFormatCheck, String> {
 
     // 是否允许为空
     private boolean canBeNull;
@@ -27,7 +27,7 @@ public class TimeFormatValidator implements ConstraintValidator<TimeFormat, Stri
     private String format;
 
     @Override
-    public void initialize(TimeFormat constraintAnnotation) {
+    public void initialize(TimeFormatCheck constraintAnnotation) {
         this.canBeNull = constraintAnnotation.canBeNull();
         this.format = constraintAnnotation.format();
     }
