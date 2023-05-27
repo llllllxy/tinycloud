@@ -32,8 +32,10 @@ public class UcUserServiceImpl implements UcUserService {
         UcUser ucUser = this.ucUserMapper.selectOne(Wrappers.<UcUser>lambdaQuery()
                 .eq(UcUser::getUserId, userId)
                 .eq(UcUser::getDelFlag, GlobalConstant.NOT_DELETED));
-
-        return BeanUtils.transformBean(ucUser, UcUserVo.class);
+        if (ucUser != null) {
+            return BeanUtils.transformBean(ucUser, UcUserVo.class);
+        }
+        return null;
     }
 
     @Override
