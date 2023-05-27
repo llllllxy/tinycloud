@@ -1,3 +1,4 @@
+# SpringCloud
 spring:
   cloud:
     loadbalancer:
@@ -16,7 +17,7 @@ spring:
         server-addr: ${spring.cloud.nacos.discovery.server-addr}
         username: nacos
         password: nacos
-        # 命名空间(注意是id)
+        # 命名空间(注意是id)，不配置就是默认的public
         # namespace: Test
         # 分组
         group: DEFAULT_GROUP
@@ -24,7 +25,6 @@ spring:
         file-extension: yml
         # 扩展配置
         extension-configs:
-          - data-id: tinycloud-common-pro.yml
+          - data-id: tinycloud-common-dev.yml
             group: DEFAULT_GROUP
             refresh: true
-

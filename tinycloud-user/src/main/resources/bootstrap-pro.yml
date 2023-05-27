@@ -1,6 +1,9 @@
 # SpringCloud
 spring:
   cloud:
+    loadbalancer:
+      ribbon:
+        enabled: false
     nacos:
       discovery:
         # 服务注册地址
