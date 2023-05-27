@@ -27,7 +27,6 @@ public class GatewayApplication {
         Environment env = application.getEnvironment();
         String ip = InetAddress.getLocalHost().getHostAddress();
         String port = env.getProperty("server.port");
-        String path = env.getProperty("server.servlet.context-path");
 
         logger.info("\n----------------------------------------------------------\n\t" +
                 "tinycloud-gateway 启动成功！\n\t" +
@@ -38,7 +37,7 @@ public class GatewayApplication {
                 "Access URLs:\n\t" +
                 "Local: \t\thttp://localhost:" + port + "/\n\t" +
                 "External: \thttp://" + ip + ":" + port + "/\n\t" +
-                "Swagger: \thttp://" + ip + ":" + port + path + "/doc.html\n" +
+                "Swagger: \thttp://" + ip + ":" + port + "/doc.html\n" +
                 "-------------------------------------------------------------------------");
     }
 }
