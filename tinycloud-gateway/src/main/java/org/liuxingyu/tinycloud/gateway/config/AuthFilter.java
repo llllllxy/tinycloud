@@ -2,6 +2,7 @@ package org.liuxingyu.tinycloud.gateway.config;
 
 import com.alibaba.nacos.common.utils.StringUtils;
 import io.jsonwebtoken.Claims;
+import org.liuxingyu.tinycloud.gateway.utils.IpUtils;
 import org.liuxingyu.tinycloud.gateway.utils.JsonUtils;
 import org.liuxingyu.tinycloud.gateway.utils.JwtUtils;
 import org.slf4j.Logger;
@@ -32,7 +33,8 @@ import java.util.concurrent.TimeUnit;
 
 
 /**
- * 全局鉴权过滤器
+ * 网关全局会话认证过滤器
+ * （为啥这里很多公共变量都写成魔法值了呢。因为网关组件不想引入tinycloud-common组件，影响不大，只要和common组件里的能对的上就行）
  *
  * @author liuxingyu01
  * @since 2021-4-25 16:29:08
@@ -52,14 +54,14 @@ public class AuthFilter implements GlobalFilter, Ordered {
     private static final String TOKEN_KEY = "Authorization";
 
     /**
-     * 缓存用户会话redis的key
+     * 缓存用户会话信息的redis的key
      */
     private final static String AUTH_TOKEN_CACHE = "tinycloud:cache:token";
 
     /**
      * 刷新redis里缓存的时间阈值（目前设置的是10分钟）
      */
-    private static final long MILLIS_MINUTE_TEN = 10 * 60 * 1000L;
+    private static final long MILLIS_MINUTE_THRESHOLD = 10 * 60 * 1000L;
 
     /**
      * 毫秒 --> 1秒等于1000毫秒
@@ -80,11 +82,20 @@ public class AuthFilter implements GlobalFilter, Ordered {
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-        String path = exchange.getRequest().getURI().getPath();
+        ServerHttpResponse response = exchange.getResponse();
+        ServerHttpRequest request = exchange.getRequest();
+
+        // 校验是否在ip黑名单里面
+        if (isIllegalIp(request)) {
+            return ipForbidden(response);
+        }
+
+        String path = request.getURI().getPath();
         // 不需要登录校验的话直接跳过后面的步骤
         if (isSkip(path)) {
-            // 设置用户信息到请求头，传递到下游微服务，下游服务需要判断GATEWAY_REQUEST_URL是否为空来确定此次访问是不是从网关过来的，不是网关过来的禁止访问
-            ServerHttpRequest mutableReq = exchange.getRequest().mutate()
+            // 设置用户信息到请求头，传递到下游微服务，
+            // 下游服务需要判断GATEWAY_REQUEST_URL是否为空来确定此次访问是不是从网关过来的，不是网关过来的禁止访问
+            ServerHttpRequest mutableReq = request.mutate()
                     .header("USER_ID", "")
                     .header("USERNAME", "")
                     .header("GATEWAY_REQUEST_URL", path)
@@ -93,12 +104,11 @@ public class AuthFilter implements GlobalFilter, Ordered {
             return chain.filter(mutableExchange);
         }
         // 从请求头或者参数里获取token
-        ServerHttpResponse resp = exchange.getResponse();
-        String headerToken = exchange.getRequest().getHeaders().getFirst(TOKEN_KEY);
-        String paramToken = exchange.getRequest().getQueryParams().getFirst(TOKEN_KEY);
+        String headerToken = request.getHeaders().getFirst(TOKEN_KEY);
+        String paramToken = request.getQueryParams().getFirst(TOKEN_KEY);
         // 第1步：校验请求方有没有带token过来
         if (StringUtils.isAllBlank(headerToken, paramToken)) {
-            return unAuth(resp);
+            return unAuth(response);
         }
         String token = StringUtils.isBlank(headerToken) ? paramToken : headerToken;
 
@@ -107,7 +117,7 @@ public class AuthFilter implements GlobalFilter, Ordered {
             // 去除TOKEN_PREFIX
             token = token.replace(TOKEN_PREFIX, "");
         } else { // token不是以TOKEN_PREFIX开头的，不合格
-            return unAuth(resp);
+            return unAuth(response);
         }
 
         // 第3步：校验token是不是伪造的（能否parseJwt成功，不报异常就是真的）
@@ -115,18 +125,18 @@ public class AuthFilter implements GlobalFilter, Ordered {
         try {
             claims = JwtUtils.parseJwt(token);
         } catch (Exception e) {
-            return unAuth(resp);
+            return unAuth(response);
         }
         // 从jwt的Payload里获取auth_token，这是会话的redis-key，它在redis里面存着用户信息，包括userId，username等
         String auth_token = (String) claims.get("auth_token");
         // 第4步：校验auth_token在redis里是否存在，不存在说明会话已失效
         String authString = stringRedisTemplate.opsForValue().get(AUTH_TOKEN_CACHE + ":" + auth_token);
         if (StringUtils.isBlank(authString)) {
-            return unAuth(resp);
+            return unAuth(response);
         }
         Map<String, Object> authMap = (Map<String, Object>) JsonUtils.parseMap(authString);
         if (Objects.isNull(authMap) || authMap.isEmpty()) {
-            return unAuth(resp);
+            return unAuth(response);
         }
         // 第5步：会话校验合格，取出会话信息，并向下游服务传递（后续的权限和角色值可能也会放在authMap里，同时校验）
         String userId = (String) authMap.get("userId");
@@ -135,7 +145,7 @@ public class AuthFilter implements GlobalFilter, Ordered {
         long currentTime = System.currentTimeMillis();
 
         // 验证token有效期，相差不足10分钟时，自动刷新缓存，这样设计可以减少对redis的访问
-        if (expireTime - currentTime <= MILLIS_MINUTE_TEN) {
+        if (expireTime - currentTime <= MILLIS_MINUTE_THRESHOLD) {
             authMap.put("loginTime", currentTime);
             authMap.put("expireTime", currentTime + AUTH_TIMEOUT * MILLIS_SECOND);
             // 重新放入redis，并且刷新缓存时间
@@ -143,7 +153,7 @@ public class AuthFilter implements GlobalFilter, Ordered {
         }
 
         // 设置用户信息到请求头，传递到下游微服务，下游服务需要判断GATEWAY_REQUEST_URL是否为空来确定此次访问是不是从网关过来的，不是网关过来的禁止访问
-        ServerHttpRequest mutableReq = exchange.getRequest().mutate()
+        ServerHttpRequest mutableReq = request.mutate()
                 .header("USER_ID", userId)
                 .header("USERNAME", username)
                 .header("GATEWAY_REQUEST_URL", path)
@@ -228,6 +238,22 @@ public class AuthFilter implements GlobalFilter, Ordered {
                     return true;
                 }
             }
+        }
+        return false;
+    }
+
+    /**
+     * 校验是否在ip黑名单内(ip是否非法)
+     *
+     * @param request ServerHttpRequest
+     * @return false不非法 true非法
+     */
+    private boolean isIllegalIp(ServerHttpRequest request) {
+        String ip = IpUtils.getIP(request);
+        // 黑名单ip配置，如果属于黑名单IP则进行拦截
+        if (!CollectionUtils.isEmpty(gatewayConfigProperties.getBlackIpList())
+                && gatewayConfigProperties.getBlackIpList().contains(ip)) {
+            return true;
         }
         return false;
     }
