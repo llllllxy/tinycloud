@@ -117,7 +117,7 @@ gateway:
       - '/gateway/ability-server/**'
     # 黑名单ip列表
     black-ip-list:
-      - '192.168.2.5'
+      - '192.168.0.5'
       - '192.168.1.3'
     # 跳过接口权限认证path(支持spring通配符)
     skip-permission-path:
@@ -125,4 +125,4 @@ gateway:
       - '/gateway/resource/group/loadAllGroupList'
       - '/gateway/user/initialize/loginStatus'
     jwtSecret: K$N)A3*sGGf<wo*22*%&(DF
-    earlyRenewalTime: 3
+    earlyRenewalTime: 600

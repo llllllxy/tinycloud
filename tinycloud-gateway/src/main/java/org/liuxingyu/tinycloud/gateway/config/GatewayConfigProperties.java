@@ -43,9 +43,9 @@ public class GatewayConfigProperties {
     private String jwtSecret;
 
     /**
-     * 提前续期token时间(分)
+     * 提前续期redis里的token时间阈值(单位秒，默认值600)
      */
-    private Integer earlyRenewalTime;
+    private Integer earlyRenewalTime = 600;
 
     public List<String> getSkipAuthPath() {
         return skipAuthPath;

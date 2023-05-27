@@ -59,11 +59,6 @@ public class AuthFilter implements GlobalFilter, Ordered {
     private final static String AUTH_TOKEN_CACHE = "tinycloud:cache:token";
 
     /**
-     * 刷新redis里缓存的时间阈值（目前设置的是10分钟）
-     */
-    private static final long MILLIS_MINUTE_THRESHOLD = 10 * 60 * 1000L;
-
-    /**
      * 毫秒 --> 1秒等于1000毫秒
      */
     private static final long MILLIS_SECOND = 1000L;
@@ -145,7 +140,7 @@ public class AuthFilter implements GlobalFilter, Ordered {
         long currentTime = System.currentTimeMillis();
 
         // 验证token有效期，相差不足10分钟时，自动刷新缓存，这样设计可以减少对redis的访问
-        if (expireTime - currentTime <= MILLIS_MINUTE_THRESHOLD) {
+        if (expireTime - currentTime <= gatewayConfigProperties.getEarlyRenewalTime() * MILLIS_SECOND) {
             authMap.put("loginTime", currentTime);
             authMap.put("expireTime", currentTime + AUTH_TIMEOUT * MILLIS_SECOND);
             // 重新放入redis，并且刷新缓存时间
