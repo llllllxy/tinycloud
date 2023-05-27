@@ -1,6 +1,6 @@
 # Tomcat
 server:
-  port: 8083
+  port: 8080
 
 # Spring
 spring:
@@ -35,10 +35,13 @@ spring:
         # #连接池最大阻塞等待时间（使用负值表示没有限制）
         max-wait: 5s
   cloud:
+    loadbalancer:
+      ribbon:
+        enabled: false
     nacos:
       discovery:
         # 服务注册地址
-        server-addr: 192.168.3.189:38848
+        server-addr: nacos-dev:38848
         username: nacos
         password: nacos
         # namespace: Test
