@@ -36,10 +36,21 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-loadbalancer</artifactId>
         </dependency>
+        <!--caffeine 替换LB 默认缓存实现-->
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+        </dependency>
         <!-- nacos注册中心 -->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>spring-cloud-starter-netflix-ribbon</artifactId>
+                    <groupId>org.springframework.cloud</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <!-- nacos配置中心 -->
         <dependency>
