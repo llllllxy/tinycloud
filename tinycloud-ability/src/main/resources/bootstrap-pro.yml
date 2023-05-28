@@ -4,6 +4,10 @@ spring:
     loadbalancer:
       ribbon:
         enabled: false
+      cache:
+        enabled: true # 开启缓存
+        caffeine:
+          spec: maximumSize=1000,expireAfterWrite=60s # 设置 Caffeine 缓存的参数
     nacos:
       discovery:
         # 服务注册地址
