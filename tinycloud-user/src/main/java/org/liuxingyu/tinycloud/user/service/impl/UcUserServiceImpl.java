@@ -56,8 +56,8 @@ public class UcUserServiceImpl implements UcUserService {
 
         Page<UcUser> page = this.ucUserMapper.selectPage(new Page<>(pageQuery.getPageNo(), pageQuery.getPageSize()), wrapper);
         if (page != null && !CollectionUtils.isEmpty(page.getRecords())) {
-            responsePage.setTotalPage(page.getPages());
-            responsePage.setTotalCount(page.getTotal());
+            responsePage.setTotalPage((int) page.getPages());
+            responsePage.setTotalCount((int) page.getTotal());
 
             responsePage.setRecords(page.getRecords().stream().map(x -> {
                 UcUserVo ucUserVo = new UcUserVo();
@@ -90,8 +90,8 @@ public class UcUserServiceImpl implements UcUserService {
 
         Page<UcUser> page = this.ucUserMapper.selectPage(new Page<>(pageQuery.getPageNo(), pageQuery.getPageSize()), wrapper);
         if (page != null && !CollectionUtils.isEmpty(page.getRecords())) {
-            responsePage.setTotalPage(page.getPages());
-            responsePage.setTotalCount(page.getTotal());
+            responsePage.setTotalPage((int) page.getPages());
+            responsePage.setTotalCount((int) page.getTotal());
 
             responsePage.setRecords(page.getRecords().stream().map(x -> {
                 UcUserVo ucUserVo = new UcUserVo();
