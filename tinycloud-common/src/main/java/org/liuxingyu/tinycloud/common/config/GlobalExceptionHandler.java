@@ -81,6 +81,16 @@ public class GlobalExceptionHandler {
         return buildResponseEntity(ResultCode.PARAM_ERROR.getCode(), message);
     }
 
+    /**
+     * 捕获业务异常
+     *
+     * @param e BusinessException
+     * @return  ApiResult
+     */
+    @ExceptionHandler(BusinessException.class)
+    public ApiResult<?> handleBusinessException(BusinessException e) {
+        return buildResponseEntity(e.getCode(), e.getMessage());
+    }
 
     /**
      * 其他异常统一处理
@@ -100,10 +110,6 @@ public class GlobalExceptionHandler {
         // 请求方式method不支持异常
         if (throwable instanceof HttpRequestMethodNotSupportedException) {
             return buildResponseEntity(ResultCode.RESOURCE_METHOD_NOT_SUPPORT.getCode(), ResultCode.RESOURCE_METHOD_NOT_SUPPORT.getDesc());
-        }
-        // 自定义业务异常
-        if (throwable instanceof BusinessException) {
-            return buildResponseEntity(((BusinessException) throwable).getCode(), throwable.getMessage());
         }
         // 其他异常（统一返回500）
         return buildResponseEntity(ResultCode.UNKNOWN_ERROR.getCode(), ResultCode.UNKNOWN_ERROR.getDesc());
