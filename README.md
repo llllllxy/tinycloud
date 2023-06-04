@@ -12,11 +12,11 @@
 9. tinycloud-oss         服务，文件中心，端口8085
 
 ### nacos说明
-对应nacos版本1.4.2，docker中运行脚本如下
+对应nacos版本2.1.0，docker中运行脚本如下
 ```
-docker pull nacos/nacos-server:1.4.2
+docker pull nacos/nacos-server:2.1.0
 
-docker run -d -e MODE=standalone -e PREFER_HOST_MODE=hostname -e SPRING_DATASOURCE_PLATFORM=mysql -e MYSQL_SERVICE_HOST=10.110.34.93 -e MYSQL_SERVICE_PORT=3306 -e MYSQL_SERVICE_USER=root -e MYSQL_SERVICE_PASSWORD=Wladmin?93 -e MYSQL_SERVICE_DB_NAME=nacos_config -p 8848:8848 --name nacos1.4.2 --restart=always nacos/nacos-server:1.4.2
+docker run -d -e MODE=standalone -e PREFER_HOST_MODE=hostname -e SPRING_DATASOURCE_PLATFORM=mysql -e MYSQL_SERVICE_HOST=127.0.0.1 -e MYSQL_SERVICE_PORT=3306 -e MYSQL_SERVICE_USER=root -e MYSQL_SERVICE_PASSWORD=123456 -e MYSQL_SERVICE_DB_NAME=nacos_config -p 8848:8848 --name nacos2.1.0 --restart=always nacos/nacos-server:2.1.0
 
 ```
 
@@ -62,14 +62,15 @@ docker run -d -e MODE=standalone -e PREFER_HOST_MODE=hostname -e SPRING_DATASOUR
 
 | 框架                        | 版本号         | 描述                                                         |
 | -------------------------- | ------------- | ------------------------------------------------------------ |
-| springcloud               | Hoxton.SR9    |                                                              |
-| springcloud-alibaba       | 2.2.6.RELEASE |
-| nacos                      | 1.4.2         | 配置中心、注册中心              |
-| springboot                | 2.3.6.RELEASE |                                                              |
-| openfeign                  | 2.2.6.RELEASE | 微服务接口调用组件                                           |
-| mybatis-plus               | 3.5.3.1       | 增强MyBatis                                                             |
+| springcloud                | Hoxton.SR12   |                                                              |
+| springcloud-alibaba        | 2.2.9.RELEASE |                                                              |
+| nacos                      | 2.1.0         | 配置中心、注册中心                                               |
+| springboot                 | 2.3.12.RELEASE|                                                              |
+| openfeign                  | 2.2.9.RELEASE | 微服务接口调用组件                                              |
+| mybatis-plus               | 3.5.3.1       | 增强MyBatis                                                  |
 | druid                      | 1.2.16        |                                                              |
-| redisson                   | 3.16.0        | redisson实现分布式锁                                         |
-| jjwt                       | 0.9.1         | 生成jwt toke认证                                             | |
+| redisson                   | 3.16.0        | redisson实现分布式锁                                           |
+| jjwt                       | 0.9.1         | 生成jwt toke认证                                              | 
+| apache-commons             | xxx           | apache-commons 工具包集成                                     | 
 | .........                  |               |                                                              |
 
