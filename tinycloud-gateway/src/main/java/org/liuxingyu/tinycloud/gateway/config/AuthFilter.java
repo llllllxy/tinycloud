@@ -1,6 +1,5 @@
 package org.liuxingyu.tinycloud.gateway.config;
 
-import com.alibaba.nacos.common.utils.StringUtils;
 import io.jsonwebtoken.Claims;
 import org.liuxingyu.tinycloud.gateway.utils.IpUtils;
 import org.liuxingyu.tinycloud.gateway.utils.JsonUtils;
@@ -20,6 +19,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.PathMatcher;
+import org.springframework.util.StringUtils;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -102,10 +102,10 @@ public class AuthFilter implements GlobalFilter, Ordered {
         String headerToken = request.getHeaders().getFirst(TOKEN_KEY);
         String paramToken = request.getQueryParams().getFirst(TOKEN_KEY);
         // 第1步：校验请求方有没有带token过来
-        if (StringUtils.isAllBlank(headerToken, paramToken)) {
+        if (StringUtils.isEmpty(headerToken) && StringUtils.isEmpty(paramToken)) {
             return unAuth(response);
         }
-        String token = StringUtils.isBlank(headerToken) ? paramToken : headerToken;
+        String token = StringUtils.isEmpty(headerToken) ? paramToken : headerToken;
 
         // 第2步：校验token的格式是否正确
         if (Objects.nonNull(token) && token.startsWith(TOKEN_PREFIX)) {
@@ -126,7 +126,7 @@ public class AuthFilter implements GlobalFilter, Ordered {
         String auth_token = (String) claims.get("auth_token");
         // 第4步：校验auth_token在redis里是否存在，不存在说明会话已失效
         String authString = stringRedisTemplate.opsForValue().get(AUTH_TOKEN_CACHE + ":" + auth_token);
-        if (StringUtils.isBlank(authString)) {
+        if (StringUtils.isEmpty(authString)) {
             return unAuth(response);
         }
         Map<String, Object> authMap = (Map<String, Object>) JsonUtils.parseMap(authString);
@@ -218,7 +218,7 @@ public class AuthFilter implements GlobalFilter, Ordered {
      * @return false未匹配成功 true匹配成功
      */
     private boolean matchPaths(List<String> configPaths, String requestPath) {
-        if (CollectionUtils.isEmpty(configPaths) || StringUtils.isBlank(requestPath)) {
+        if (CollectionUtils.isEmpty(configPaths) || StringUtils.isEmpty(requestPath)) {
             return false;
         }
         PathMatcher pathMatcher = new AntPathMatcher();
