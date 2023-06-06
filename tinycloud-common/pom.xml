@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>tinycloud</artifactId>
-        <groupId>org.liuxingyu.tinycloud</groupId>
+        <groupId>org.tinycloud</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 

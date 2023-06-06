@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>tinycloud</artifactId>
-        <groupId>org.liuxingyu.tinycloud</groupId>
+        <groupId>org.tinycloud</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
@@ -21,12 +21,12 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.liuxingyu.tinycloud</groupId>
+            <groupId>org.tinycloud</groupId>
             <artifactId>tinycloud-common</artifactId>
             <version>1.0.0-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>org.liuxingyu.tinycloud</groupId>
+            <groupId>org.tinycloud</groupId>
             <artifactId>tinycloud-bean</artifactId>
             <version>1.0.0-SNAPSHOT</version>
         </dependency>
