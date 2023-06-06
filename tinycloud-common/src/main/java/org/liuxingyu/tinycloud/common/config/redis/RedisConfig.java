@@ -16,7 +16,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 /**
  * <p>
- *  RedisTemplate配置
+ * RedisTemplate配置
  * </p>
  *
  * @author liuxingyu01
@@ -26,8 +26,8 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 public class RedisConfig {
 
     @Bean("redisTemplate")
-    public RedisTemplate<Object, Object> initRedisTemplate(RedisConnectionFactory redisConnectionFactory) {
-        RedisTemplate<Object, Object> redisTemplate = new RedisTemplate<>();
+    public RedisTemplate<String, Object> initRedisTemplate(RedisConnectionFactory redisConnectionFactory) {
+        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
         // 设置连接工厂
         redisTemplate.setConnectionFactory(redisConnectionFactory);
         // 定义 String 序列化器
@@ -35,14 +35,14 @@ public class RedisConfig {
         // 定义 Jackson 序列化器
         Jackson2JsonRedisSerializer jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer(Object.class);
         ObjectMapper objectMapper = new ObjectMapper();
-        //反序列化时智能识别变量名（识别没有按驼峰格式命名的变量名）
+        // 反序列化时智能识别变量名（识别没有按驼峰格式命名的变量名）
         objectMapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
-        //反序列化识别对象类型
-//        objectMapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
+        // 反序列化识别对象类型
+        // objectMapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
         objectMapper.activateDefaultTyping(LaissezFaireSubTypeValidator.instance, ObjectMapper.DefaultTyping.NON_FINAL, JsonTypeInfo.As.WRAPPER_ARRAY);
-        //反序列化如果有多的属性，不抛出异常
+        // 反序列化如果有多的属性，不抛出异常
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        //反序列化如果碰到不识别的枚举值，是否作为空值解释，true:不会抛不识别的异常, 会赋空值，false:会抛不识别的异常
+        // 反序列化如果碰到不识别的枚举值，是否作为空值解释，true:不会抛不识别的异常, 会赋空值，false:会抛不识别的异常
         objectMapper.configure(DeserializationFeature.READ_UNKNOWN_ENUM_VALUES_AS_NULL, true);
         jackson2JsonRedisSerializer.setObjectMapper(objectMapper);
         // 设置 Redis 的 key 以及 hash 结构的 field 使用 String 序列化器
@@ -56,8 +56,7 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisClient initRedisClient(RedisTemplate redisTemplate){
+    public RedisClient initRedisClient(RedisTemplate<String, Object> redisTemplate) {
         return new RedisClient(redisTemplate);
     }
-
 }
