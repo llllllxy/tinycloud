@@ -106,11 +106,9 @@ spring:
             - StripPrefix=1
 
 
-# 配置日志级别，方别调试
+# 配置日志
 logging:
-  level:
-    org.liuxingyu.tinycloud: info
-    org.springframework: info
+  config: classpath:logback-config.xml
 
 # 网关自定义配置
 gateway:
