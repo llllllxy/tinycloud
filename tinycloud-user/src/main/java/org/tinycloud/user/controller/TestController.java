@@ -12,6 +12,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
+
 
 @Api(tags = "用户中心-测试", value = "用户中心-测试")
 @RestController
@@ -38,5 +43,22 @@ public class TestController {
     public ApiResult<?> testRedis() {
         redisClient.set("tinycloud", "testdata", 100);
         return ApiResult.success(null, "调用成功");
+    }
+
+
+    @ApiOperation(value = "测试LocalDateTime序列化", notes = "测试LocalDateTime序列化")
+    @RequestMapping(value = "/testJackson", method = RequestMethod.GET)
+    public ApiResult<?> testJackson() {
+        Map<String, Object> response = new HashMap<String, Object>();
+        response.put("currentTime", LocalDateTime.now());
+
+        response.put("currentDate", LocalDate.now());
+
+        response.put("java.util.Date", new java.util.Date());
+
+        long num = 499664896555655655L;
+        response.put("num", num);
+
+        return ApiResult.success(response, "调用成功");
     }
 }
