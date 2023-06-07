@@ -44,6 +44,10 @@ public class UcUser implements Serializable {
     @TableField("nickname")
     private String nickname;
 
+    @ApiModelProperty("所属组织编码")
+    @TableField("organ_id")
+    private String organId;
+
     @ApiModelProperty("手机号")
     @TableField("phone")
     private String phone;
@@ -112,6 +116,14 @@ public class UcUser implements Serializable {
         this.nickname = nickname;
     }
 
+    public String getOrganId() {
+        return organId;
+    }
+
+    public void setOrganId(String organId) {
+        this.organId = organId;
+    }
+
     public String getPhone() {
         return phone;
     }
@@ -176,6 +188,7 @@ public class UcUser implements Serializable {
                 ", username = " + username +
                 ", password = " + password +
                 ", nickname = " + nickname +
+                ", organId = " + organId +
                 ", phone = " + phone +
                 ", email = " + email +
                 ", status = " + status +
