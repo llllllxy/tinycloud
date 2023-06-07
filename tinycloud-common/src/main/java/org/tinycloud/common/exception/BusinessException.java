@@ -13,13 +13,13 @@ import org.tinycloud.common.consts.SystemCode;
  */
 public class BusinessException extends RuntimeException {
 
-    private final Integer code;
+    private final String code;
 
     private final String message;
 
     private final Object errT;
 
-    public Integer getCode() {
+    public String getCode() {
         return code;
     }
 
@@ -31,14 +31,14 @@ public class BusinessException extends RuntimeException {
         return errT;
     }
 
-    private BusinessException(Integer code, String message, Object errT) {
+    private BusinessException(String code, String message, Object errT) {
         super(message);
         this.code = code;
         this.message = message;
         this.errT = errT;
     }
 
-    private BusinessException(Integer code, String message) {
+    private BusinessException(String code, String message) {
         this(code, message, null);
     }
 
@@ -48,7 +48,7 @@ public class BusinessException extends RuntimeException {
      * @param code 错误码
      * @param message 错误信息
      */
-    public BusinessException(SystemCode systemCode, Integer code, String message) {
+    public BusinessException(SystemCode systemCode, String code, String message) {
         this(systemCode.getCode() + code, message, null);
     }
 

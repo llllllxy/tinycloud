@@ -1,6 +1,5 @@
 package org.tinycloud.common.model;
 
-
 import org.tinycloud.common.consts.ResultCode;
 import org.tinycloud.common.consts.SystemCode;
 import org.tinycloud.common.exception.BusinessException;
@@ -23,7 +22,7 @@ public abstract class Checker {
      * @param msg        文案
      * @throws BusinessException matched = false则抛出异常
      */
-    public static void checkArgument(boolean matched, SystemCode systemCode, Integer code, String msg) {
+    public static void checkArgument(boolean matched, SystemCode systemCode, String code, String msg) {
         if (!matched) {
             throw new BusinessException(systemCode, code, msg);
         }

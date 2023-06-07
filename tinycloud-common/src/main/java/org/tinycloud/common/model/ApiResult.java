@@ -19,7 +19,7 @@ import java.io.Serializable;
 public class ApiResult<T> implements Serializable {
     private static final long serialVersionUID = -1491499610241557029L;
 
-    private Integer code = ResultCode.SUCCESS.getCode();
+    private String code = ResultCode.SUCCESS.getCode();
 
     private T data;
 
@@ -29,11 +29,11 @@ public class ApiResult<T> implements Serializable {
 
     private long time;
 
-    public Integer getCode() {
+    public String getCode() {
         return code;
     }
 
-    public void setCode(Integer code) {
+    public void setCode(String code) {
         this.code = code;
     }
 
@@ -68,7 +68,7 @@ public class ApiResult<T> implements Serializable {
      * @param data 自定义data
      * @param msg  自定义消息
      */
-    public ApiResult(Integer code, T data, String msg) {
+    public ApiResult(String code, T data, String msg) {
         this.code = code;
         this.data = data;
         this.msg = msg;
@@ -128,7 +128,7 @@ public class ApiResult<T> implements Serializable {
      * @param <T>  泛型
      * @return ApiResult<T>
      */
-    public static <T> ApiResult<T> fail(Integer code, String msg) {
+    public static <T> ApiResult<T> fail(String code, String msg) {
         return new ApiResult<>(code, null, msg);
     }
 
@@ -141,7 +141,7 @@ public class ApiResult<T> implements Serializable {
      * @param <T>        泛型
      * @return ApiResult<T>
      */
-    public static <T> ApiResult<T> fail(SystemCode systemCode, Integer code, String msg) {
+    public static <T> ApiResult<T> fail(SystemCode systemCode, String code, String msg) {
         return new ApiResult<>(systemCode.getCode() + code, null, msg);
     }
 

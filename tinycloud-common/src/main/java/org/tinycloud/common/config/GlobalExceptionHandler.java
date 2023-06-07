@@ -19,7 +19,7 @@ import java.util.List;
 
 /**
  * <p>
- *  全局统一异常处理
+ * 全局统一异常处理
  * </p>
  *
  * @author liuxingyu01
@@ -33,7 +33,7 @@ public class GlobalExceptionHandler {
      * 捕获404异常
      *
      * @param e NoHandlerFoundException
-     * @return  ApiResult
+     * @return ApiResult
      */
     @ExceptionHandler(NoHandlerFoundException.class)
     public ApiResult<?> handle404Error(Throwable e) {
@@ -85,7 +85,7 @@ public class GlobalExceptionHandler {
      * 捕获业务异常
      *
      * @param e BusinessException
-     * @return  ApiResult
+     * @return ApiResult
      */
     @ExceptionHandler(BusinessException.class)
     public ApiResult<?> handleBusinessException(BusinessException e) {
@@ -115,7 +115,7 @@ public class GlobalExceptionHandler {
         return buildResponseEntity(ResultCode.UNKNOWN_ERROR.getCode(), ResultCode.UNKNOWN_ERROR.getDesc());
     }
 
-    private static ApiResult<?> buildResponseEntity(Integer code, String msg) {
+    private static ApiResult<?> buildResponseEntity(String code, String msg) {
         return ApiResult.fail(code, msg);
     }
 }
