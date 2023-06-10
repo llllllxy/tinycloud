@@ -14,16 +14,18 @@ public enum ResultCode {
     PARAM_ERROR("400", "参数校验失败"),
     UNAUTHORIZED("401", "会话不存在或已失效"),
     NOT_EXIST("402", "不存在"),
-    FORBIDDEN("403", "资源访问受限，无权限"),
+    FORBIDDEN("403", "访问受限，无权限"),
     RESOURCE_NOT_FOUND("404", "资源未找到"),
     RESOURCE_METHOD_NOT_SUPPORT("405", "请求方法不支持"),
     RESOURCE_CONFLICT("409", "资源冲突"),
+    DUPLICATE_SUBMISSIONS("410", "重复提交"),
     REQUEST_PARAM_ERROR("412", "参数错误"),
     PRECONDITION_FAILED("428", "要求先决条件"),
-    NOT_SUPPORT("409", "不支持的请求"),
+    NOT_SUPPORT("429", "不支持的请求"),
     ALREADY_EXECUTING("410", "程序正在执行，请稍后再试"),
     UNKNOWN_ERROR("500", "系统未知错误"),
     NOT_IMPLEMENTED("501", "接口暂未实现");
+
     /**
      * 错误码
      */
