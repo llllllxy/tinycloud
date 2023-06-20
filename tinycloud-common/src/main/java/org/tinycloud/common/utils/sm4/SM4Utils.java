@@ -429,7 +429,11 @@ public class SM4Utils {
 
 
         // 测试builder模式
-        SM4Utils sm4Utils = SM4Utils.builder().secretKey("Ber3z8TK96xrg@e2").ivParameter("E%BJuDUTvXfwSuGQ").mode("CBC").hexString(false).build();
+        SM4Utils sm4Utils = SM4Utils.builder()
+                .secretKey("Ber3z8TK96xrg@e2")
+                .ivParameter("E%BJuDUTvXfwSuGQ")
+                .mode("CBC").hexString(false)
+                .build();
         System.out.println("build - 加密密文: " + sm4Utils.encrypt(plainText));
         System.out.println("build - 解密明文: " + sm4Utils.decrypt(sm4Utils.encrypt(plainText)));
     }
