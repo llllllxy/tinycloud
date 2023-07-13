@@ -1,14 +1,16 @@
 package org.tinycloud.common.utils.sm4;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
+ * 国密4加密算法工具类（对称加密，类似于AES）
+ *
  * @author liuxingyu01
- * @date 2021-09-08-19:45
- * @description 国密4加密算法工具类（对称加密）
+ * @since  2021-09-08-19:45
  **/
 public class SM4Utils {
 
@@ -212,11 +214,11 @@ public class SM4Utils {
             ctx.isPadding = true;
             ctx.mode = SM4.SM4_ENCRYPT;
 
-            byte[] keyBytes = secretKey.getBytes("UTF-8");
+            byte[] keyBytes = secretKey.getBytes(StandardCharsets.UTF_8);
 
             SM4 sm4 = new SM4();
             sm4.sm4_setkey_enc(ctx, keyBytes);
-            byte[] encrypted = sm4.sm4_crypt_ecb(ctx, plainText.getBytes("UTF-8"));
+            byte[] encrypted = sm4.sm4_crypt_ecb(ctx, plainText.getBytes(StandardCharsets.UTF_8));
 
             if (hexString) {
                 return byteToHex(encrypted);
@@ -266,12 +268,12 @@ public class SM4Utils {
             ctx.isPadding = true;
             ctx.mode = SM4.SM4_DECRYPT;
 
-            byte[] keyBytes = secretKey.getBytes("UTF-8");
+            byte[] keyBytes = secretKey.getBytes(StandardCharsets.UTF_8);
 
             SM4 sm4 = new SM4();
             sm4.sm4_setkey_dec(ctx, keyBytes);
             byte[] decrypted = sm4.sm4_crypt_ecb(ctx, encrypted);
-            return new String(decrypted, "UTF-8");
+            return new String(decrypted, StandardCharsets.UTF_8);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -309,12 +311,12 @@ public class SM4Utils {
             byte[] keyBytes;
             byte[] ivBytes;
 
-            keyBytes = secretKey.getBytes("UTF-8");
-            ivBytes = iv.getBytes("UTF-8");
+            keyBytes = secretKey.getBytes(StandardCharsets.UTF_8);
+            ivBytes = iv.getBytes(StandardCharsets.UTF_8);
 
             SM4 sm4 = new SM4();
             sm4.sm4_setkey_enc(ctx, keyBytes);
-            byte[] encrypted = sm4.sm4_crypt_cbc(ctx, ivBytes, plainText.getBytes("UTF-8"));
+            byte[] encrypted = sm4.sm4_crypt_cbc(ctx, ivBytes, plainText.getBytes(StandardCharsets.UTF_8));
 
             if (hexString) {
                 return byteToHex(encrypted);
@@ -367,13 +369,13 @@ public class SM4Utils {
             ctx.isPadding = true;
             ctx.mode = SM4.SM4_DECRYPT;
 
-            byte[] keyBytes = secretKey.getBytes("UTF-8");
-            byte[] ivBytes = iv.getBytes("UTF-8");
+            byte[] keyBytes = secretKey.getBytes(StandardCharsets.UTF_8);
+            byte[] ivBytes = iv.getBytes(StandardCharsets.UTF_8);
 
             SM4 sm4 = new SM4();
             sm4.sm4_setkey_dec(ctx, keyBytes);
             byte[] decrypted = sm4.sm4_crypt_cbc(ctx, ivBytes, encrypted);
-            return new String(decrypted, "UTF-8");
+            return new String(decrypted, StandardCharsets.UTF_8);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -404,10 +406,10 @@ public class SM4Utils {
     public static void main(String[] args) throws Exception {
         String plainText = "Test SM4 Function";
 
-        // 设置加密密钥
+        // 设置加密密钥，必须16字节，128位
         String secretKey = "Ber3z8TK96xrg@e2";
 
-        // 偏移量（CBC模式使用）
+        // 偏移量（CBC模式使用），必须16字节，128位
         String iv = "E%BJuDUTvXfwSuGQ";
 
         // ECB模式
@@ -422,10 +424,10 @@ public class SM4Utils {
         System.out.println("CBC模式加密");
 
         String cipherText2 = SM4Utils.encrypt_CBC(plainText, secretKey, iv);
-        System.out.println("加密密文: " + cipherText2);
+        System.out.println("加密 -> 密文: " + cipherText2);
 
         String plainText3 = SM4Utils.decrypt_CBC(cipherText2, secretKey, iv);
-        System.out.println("解密明文: " + plainText3);
+        System.out.println("解密 -> 明文: " + plainText3);
 
 
         // 测试builder模式

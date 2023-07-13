@@ -2,9 +2,11 @@ package org.tinycloud.common.utils.sm3;
 
 
 /**
+ *
+ * 国密3摘要算法工具类（类似于md5，sha256）
+ *
  * @author liuxingyu01
- * @date 2021-01-02-14:20
- * @description 国密3加密算法工具类
+ * @since 2021-01-02-14:20
  **/
 public class SM3Utils {
 
@@ -140,9 +142,6 @@ public class SM3Utils {
      * @return 加密后的字符串
      */
     public static String encode(String content) {
-        // 加密盐（使用公共盐）
-        String salt = "{1#2$3%4(5)6@7!poeeww$3%4(5)djjkkldss}";
-        content = content + salt;
         byte[] md = new byte[32];
         byte[] msg = content.getBytes();
         SM3Utils sm3 = new SM3Utils();
@@ -155,8 +154,8 @@ public class SM3Utils {
     /**
      * 国密3-加密字符串
      *
-     * @param content  待加密字符串
-     * @param salt 自定义盐
+     * @param content 待加密字符串
+     * @param salt 自定义盐，会拼接在加密字符串的后面
      * @return 加密后的字符串
      */
     public static String encode(String content, String salt) {
