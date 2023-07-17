@@ -27,6 +27,11 @@ public class UcUserServiceImpl implements UcUserService {
     @Autowired
     private UcUserMapper ucUserMapper;
 
+    /**
+     * 根据id查询详情
+     * @param userId
+     * @return
+     */
     @Override
     public UcUserVo detail(String userId) {
         UcUser ucUser = this.ucUserMapper.selectOne(Wrappers.<UcUser>lambdaQuery()
@@ -38,6 +43,12 @@ public class UcUserServiceImpl implements UcUserService {
         return null;
     }
 
+
+    /**
+     * 第二种动态排序的方法
+     * @param pageQuery UcUserPageQuery
+     * @return PageModel<UcUserVo>
+     */
     @Override
     public PageModel<UcUserVo> query(UcUserPageQuery pageQuery) {
         PageModel<UcUserVo> responsePage = new PageModel<>(pageQuery.getPageNo(), pageQuery.getPageSize());
