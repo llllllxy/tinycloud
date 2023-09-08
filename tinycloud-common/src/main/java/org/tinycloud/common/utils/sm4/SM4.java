@@ -5,9 +5,9 @@ import java.io.ByteArrayOutputStream;
 import java.util.Arrays;
 
 /**
+ * SM4算法工具类
  * @author liuxingyu01
- * @date 2021-09-08-19:41
- * @description SM4算法工具类
+ * @since 2021-09-08-19:41
  **/
 public class SM4 {
     public static final int SM4_ENCRYPT = 1;
@@ -199,7 +199,7 @@ public class SM4 {
         return ret;
     }
 
-    public void sm4_setkey_enc(SM4_Context ctx, byte[] key) throws Exception {
+    public void sm4_setkey_enc(SM4Context ctx, byte[] key) throws Exception {
         if (ctx == null) {
             throw new Exception("ctx is null!");
         }
@@ -212,7 +212,7 @@ public class SM4 {
         sm4_setkey(ctx.sk, key);
     }
 
-    public void sm4_setkey_dec(SM4_Context ctx, byte[] key) throws Exception {
+    public void sm4_setkey_dec(SM4Context ctx, byte[] key) throws Exception {
         if (ctx == null) {
             throw new Exception("ctx is null!");
         }
@@ -229,7 +229,7 @@ public class SM4 {
         }
     }
 
-    public byte[] sm4_crypt_ecb(SM4_Context ctx, byte[] input) throws Exception {
+    public byte[] sm4_crypt_ecb(SM4Context ctx, byte[] input) throws Exception {
         if (input == null) {
             throw new Exception("input is null!");
         }
@@ -255,7 +255,7 @@ public class SM4 {
         return output;
     }
 
-    public byte[] sm4_crypt_cbc(SM4_Context ctx, byte[] iv, byte[] input) throws Exception {
+    public byte[] sm4_crypt_cbc(SM4Context ctx, byte[] iv, byte[] input) throws Exception {
         if (iv == null || iv.length != 16) {
             throw new Exception("iv error!");
         }

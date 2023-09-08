@@ -7,153 +7,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * 国密4加密算法工具类（对称加密，类似于AES）
+ * 国密4加密算法工具类（对称加密）
  *
  * @author liuxingyu01
- * @since  2021-09-08-19:45
+ * @since 2021-09-08-19:45
  **/
 public class SM4Utils {
-
-    /**
-     * 密钥key（可以16或32字节）（128位密钥/256位密钥，设置256位密钥更难破解）
-     */
-    private String secretKey;
-
-    /**
-     * 偏移量（16字节）
-     */
-    private String ivParameter;
-
-    /**
-     * 是否使用hex编码（默认true，默认使用hex）
-     */
-    private boolean hexString;
-
-    /**
-     * 加密模式（默认ECB）
-     */
-    private String mode;
-
-    public String getSecretKey() {
-        return secretKey;
-    }
-
-    public void setSecretKey(String secretKey) {
-        this.secretKey = secretKey;
-    }
-
-    public String getIvParameter() {
-        return ivParameter;
-    }
-
-    public void setIvParameter(String ivParameter) {
-        this.ivParameter = ivParameter;
-    }
-
-    public boolean isHexString() {
-        return hexString;
-    }
-
-    public void setHexString(boolean hexString) {
-        this.hexString = hexString;
-    }
-
-    public String getMode() {
-        return mode;
-    }
-
-    public void setMode(String mode) {
-        this.mode = mode;
-    }
-
-    private SM4Utils(SM4Builder builder) {
-        this.secretKey = builder.secretKey;
-        this.ivParameter = builder.ivParameter;
-        this.hexString = builder.hexString;
-        this.mode = builder.mode;
-    }
-
-
-    public static SM4Builder builder() {
-        return new SM4Builder();
-    }
-
-
-    /**
-     * SM4Builder
-     */
-    public static final class SM4Builder {
-        private String secretKey = "G78Av#yej%WZJ3ui";
-        private String ivParameter = "E%BJuDUTvXfwSuGQ";
-        private boolean hexString = true;
-        private String mode = "ECB";
-
-        public SM4Builder() {
-            this.secretKey = secretKey;
-            this.ivParameter = ivParameter;
-            this.hexString = hexString;
-            this.mode = mode;
-        }
-
-        public SM4Builder secretKey(String secretKey) {
-            this.secretKey = secretKey;
-            return this;
-        }
-
-        public SM4Builder ivParameter(String ivParameter) {
-            this.ivParameter = ivParameter;
-            return this;
-        }
-
-        public SM4Builder hexString(boolean hexString) {
-            this.hexString = hexString;
-            return this;
-        }
-
-        public SM4Builder mode(String mode) {
-            this.mode = mode;
-            return this;
-        }
-
-        public SM4Utils build() {
-            SM4Utils sm4Utils = new SM4Utils(this);
-            return sm4Utils;
-        }
-    }
-
-
-    /**
-     * 加密
-     *
-     * @param plainText 待加密的字符串
-     * @return
-     */
-    public String encrypt(String plainText) throws Exception {
-        if ("ECB".equals(mode)) {
-            return encrypt_ECB(plainText, secretKey, hexString);
-        } else if ("CBC".equals(mode)) {
-            return encrypt_CBC(plainText, secretKey, ivParameter, hexString);
-        } else {
-            throw new Exception("mode error!");
-        }
-    }
-
-
-    /**
-     * 解密
-     *
-     * @param cipherText 待解密的字符串
-     * @return
-     */
-    public String decrypt(String cipherText) throws Exception {
-        if ("ECB".equals(mode)) {
-            return decrypt_ECB(cipherText, secretKey, hexString);
-        } else if ("CBC".equals(mode)) {
-            return decrypt_CBC(cipherText, secretKey, ivParameter, hexString);
-        } else {
-            throw new Exception("mode error!");
-        }
-    }
 
 
     /**
@@ -163,7 +22,7 @@ public class SM4Utils {
      */
     public static byte[] hexToByte(String hex) throws IllegalArgumentException {
         if (hex.length() % 2 != 0) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Argument hex ( String ) must be a multiple of 2! ");
         }
         char[] arr = hex.toCharArray();
         byte[] b = new byte[hex.length() / 2];
@@ -175,14 +34,13 @@ public class SM4Utils {
         return b;
     }
 
-
     /**
      * 字节数组转换为十六进制字符串
      *
      * @param b byte[] 需要转换的字节数组
      * @return String 十六进制字符串
      */
-    public static String byteToHex(byte b[]) {
+    public static String byteToHex(byte[] b) {
         if (b == null) {
             throw new IllegalArgumentException("Argument b ( byte array ) is null! ");
         }
@@ -199,18 +57,17 @@ public class SM4Utils {
         return hs.toString().toLowerCase();
     }
 
-
     /**
      * 加密（ECB模式）
      *
      * @param plainText 待加密的内容
-     * @param secretKey 加密密钥
-     * @param hexString 返回数据类型
-     * @return
+     * @param secretKey 加密密钥16字节
+     * @param hexString 返回结果的数据类型， true-hex  false-base64
+     * @return 加密后的结果
      */
     public static String encrypt_ECB(String plainText, String secretKey, boolean hexString) {
         try {
-            SM4_Context ctx = new SM4_Context();
+            SM4Context ctx = new SM4Context();
             ctx.isPadding = true;
             ctx.mode = SM4.SM4_ENCRYPT;
 
@@ -232,23 +89,23 @@ public class SM4Utils {
     }
 
     /**
-     * 加密（ECB模式）- 返回hex
+     * 加密（ECB模式）- 返回base64
      *
      * @param plainText 待加密的内容
-     * @param secretKey 加密密钥
-     * @return
+     * @param secretKey 加密密钥16字节
+     * @return 加密后的结果，base64格式
      */
     public static String encrypt_ECB(String plainText, String secretKey) {
-        return encrypt_ECB(plainText, secretKey, true);
+        return encrypt_ECB(plainText, secretKey, false);
     }
 
     /**
      * 解密（ECB模式）
      *
      * @param cipherText 待解密的内容
-     * @param secretKey  加密密钥
-     * @param hexString  返回数据类型
-     * @return
+     * @param secretKey  加密密钥16字节
+     * @param hexString  返回结果的数据类型， true-hex  false-base64
+     * @return 解密后的结果
      */
     public static String decrypt_ECB(String cipherText, String secretKey, boolean hexString) {
         try {
@@ -264,7 +121,7 @@ public class SM4Utils {
                 encrypted = Base64.getDecoder().decode(cipherText);
             }
 
-            SM4_Context ctx = new SM4_Context();
+            SM4Context ctx = new SM4Context();
             ctx.isPadding = true;
             ctx.mode = SM4.SM4_DECRYPT;
 
@@ -285,11 +142,11 @@ public class SM4Utils {
      * 解密（ECB模式）
      *
      * @param cipherText 待解密的内容
-     * @param secretKey  加密密钥
-     * @return
+     * @param secretKey  加密密钥16字节
+     * @return 解密后的结果
      */
     public static String decrypt_ECB(String cipherText, String secretKey) {
-        return decrypt_ECB(cipherText, secretKey, true);
+        return decrypt_ECB(cipherText, secretKey, false);
     }
 
 
@@ -299,12 +156,12 @@ public class SM4Utils {
      * @param plainText 待加密的内容
      * @param secretKey 加密密钥
      * @param iv        偏移量
-     * @param hexString 返回数据类型
-     * @return
+     * @param hexString 返回结果的数据类型， true-hex  false-base64
+     * @return 加密后的结果
      */
     public static String encrypt_CBC(String plainText, String secretKey, String iv, boolean hexString) {
         try {
-            SM4_Context ctx = new SM4_Context();
+            SM4Context ctx = new SM4Context();
             ctx.isPadding = true;
             ctx.mode = SM4.SM4_ENCRYPT;
 
@@ -335,12 +192,11 @@ public class SM4Utils {
      * @param plainText 待加密的内容
      * @param secretKey 加密密钥
      * @param iv        偏移量
-     * @return
+     * @return 加密后的结果，base64格式
      */
     public static String encrypt_CBC(String plainText, String secretKey, String iv) {
-        return encrypt_CBC(plainText, secretKey, iv, true);
+        return encrypt_CBC(plainText, secretKey, iv, false);
     }
-
 
     /**
      * 解密（CBC模式）
@@ -348,8 +204,8 @@ public class SM4Utils {
      * @param cipherText 待解密的内容
      * @param secretKey  加密密钥
      * @param iv         偏移量
-     * @param hexString  返回数据类型
-     * @return
+     * @param hexString  返回结果的数据类型， true-hex  false-base64
+     * @return 解密后的结果
      */
     public static String decrypt_CBC(String cipherText, String secretKey, String iv, boolean hexString) {
         try {
@@ -365,7 +221,7 @@ public class SM4Utils {
                 encrypted = Base64.getDecoder().decode(cipherText);
             }
 
-            SM4_Context ctx = new SM4_Context();
+            SM4Context ctx = new SM4Context();
             ctx.isPadding = true;
             ctx.mode = SM4.SM4_DECRYPT;
 
@@ -389,10 +245,10 @@ public class SM4Utils {
      * @param cipherText 待解密的内容
      * @param secretKey  加密密钥
      * @param iv         偏移量
-     * @return
+     * @return 加密后的结果
      */
     public static String decrypt_CBC(String cipherText, String secretKey, String iv) {
-        return decrypt_CBC(cipherText, secretKey, iv, true);
+        return decrypt_CBC(cipherText, secretKey, iv, false);
     }
 
 
@@ -409,19 +265,19 @@ public class SM4Utils {
         // 设置加密密钥，必须16字节，128位
         String secretKey = "Ber3z8TK96xrg@e2";
 
-        // 偏移量（CBC模式使用），必须16字节，128位
-        String iv = "E%BJuDUTvXfwSuGQ";
-
         // ECB模式
         System.out.println("ECB模式加密");
         String cipherText = SM4Utils.encrypt_ECB(plainText, secretKey);
-        System.out.println("密文: " + cipherText);
+        System.out.println("加密 -> 密文: " + cipherText);
 
         String plainText2 = SM4Utils.decrypt_ECB(cipherText, secretKey);
-        System.out.println("明文: " + plainText2);
+        System.out.println("解密 -> 明文: " + plainText2);
 
         // CBC模式（需要设置一个32位的偏移量）
         System.out.println("CBC模式加密");
+
+        // 偏移量（CBC模式使用），必须16字节，128位
+        String iv = "E%BJuDUTvXfwSuGQ";
 
         String cipherText2 = SM4Utils.encrypt_CBC(plainText, secretKey, iv);
         System.out.println("加密 -> 密文: " + cipherText2);
@@ -429,14 +285,5 @@ public class SM4Utils {
         String plainText3 = SM4Utils.decrypt_CBC(cipherText2, secretKey, iv);
         System.out.println("解密 -> 明文: " + plainText3);
 
-
-        // 测试builder模式
-        SM4Utils sm4Utils = SM4Utils.builder()
-                .secretKey("Ber3z8TK96xrg@e2")
-                .ivParameter("E%BJuDUTvXfwSuGQ")
-                .mode("CBC").hexString(false)
-                .build();
-        System.out.println("build - 加密密文: " + sm4Utils.encrypt(plainText));
-        System.out.println("build - 解密明文: " + sm4Utils.decrypt(sm4Utils.encrypt(plainText)));
     }
 }

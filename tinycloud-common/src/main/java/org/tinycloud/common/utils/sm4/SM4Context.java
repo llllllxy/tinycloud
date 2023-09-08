@@ -1,18 +1,19 @@
 package org.tinycloud.common.utils.sm4;
 
 /**
+ * sm4上下文对象
  * @author liuxingyu01
- * @date 2021-09-08-19:41
- * @description
+ * @since 2021-09-08-19:41
  **/
-public class SM4_Context {
+public class SM4Context {
+
     public int mode;
 
     public long[] sk;
 
     public boolean isPadding;
 
-    public SM4_Context() {
+    public SM4Context() {
         this.mode = 1;
         this.isPadding = true;
         this.sk = new long[32];
