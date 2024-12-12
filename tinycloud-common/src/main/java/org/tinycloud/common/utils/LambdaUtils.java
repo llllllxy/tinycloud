@@ -9,6 +9,7 @@ import java.beans.PropertyDescriptor;
 import java.lang.invoke.*;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
@@ -23,7 +24,7 @@ public class LambdaUtils {
     private static final Logger logger = LoggerFactory.getLogger(LambdaUtils.class);
 
 
-    public static final Map<Class<?>, PropertyDescriptor[]> cache = new HashMap<>();
+    public static final Map<Class<?>, PropertyDescriptor[]> cache = new ConcurrentHashMap<>();
 
     public static <T> SFunction<T, ?> getLambdaGetter(Class<T> clazz, String prop) {
         try {
